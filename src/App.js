@@ -4,6 +4,7 @@ import './App.css';
 import AuthPage from './pages/AuthPage';
 import RegisterPage from './pages/RegisterPage';
 import 'react-toastify/dist/ReactToastify.css';
+import DashBoard from './pages/DashBoard';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<AuthPage />} />
         <Route path='/register/:type' element={<RegisterPage />} />
+        <Route path = '/dashboard' element = {<DashBoard/>} />
 
       </Routes>
     </BrowserRouter>
