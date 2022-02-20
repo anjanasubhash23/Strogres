@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { Button, Layout, Menu } from "antd";
 import {
   PieChartOutlined,
-  InboxOutlined,
   LogoutOutlined,
   PrinterOutlined,
   FileDoneOutlined,
   PlusCircleOutlined
 } from "@ant-design/icons";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import "./SideDrawer.css"
 import { Link } from "react-router-dom";
 import PopupBox from "./PopupBox";
+import { useDispatch } from "react-redux";
+import { LogOut } from "../store/action/auth";
 
 const { Header, Content, Sider } = Layout;
 
@@ -30,6 +31,12 @@ export default function SideDrawer(props) {
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const logout = async () => {
+    await dispatch(LogOut())
+    navigate('/')
+  }
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -42,7 +49,7 @@ export default function SideDrawer(props) {
           <Menu.Item icon={<PieChartOutlined style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} />}><Link to='/admin/dashboard' style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} >DashBoard</Link></Menu.Item>
           <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} >Job</Link></Menu.Item>
           <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item>
-          <Menu.Item icon={<LogoutOutlined />}>LogOut</Menu.Item>
+          <Menu.Item onClick={logout} icon={<LogoutOutlined />}>LogOut</Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
