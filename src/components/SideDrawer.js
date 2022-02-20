@@ -1,0 +1,68 @@
+import React, { useState } from "react";
+import { Button, Layout, Menu } from "antd";
+import {
+  PieChartOutlined,
+  InboxOutlined,
+  LogoutOutlined,
+  PrinterOutlined,
+  FileDoneOutlined,
+  PlusCircleOutlined
+} from "@ant-design/icons";
+import { useLocation } from "react-router";
+import "./SideDrawer.css"
+import { Link } from "react-router-dom";
+import PopupBox from "./PopupBox";
+
+const { Header, Content, Sider } = Layout;
+
+
+export default function SideDrawer(props) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [visible, setVisible] = useState(false)
+  const location = useLocation()
+  console.log(location)
+  const handleok = value => {
+    setVisible(value)
+  }
+  const handlecancel = value => {
+    setVisible(value)
+  }
+  const onCollapse = (collapsed) => {
+    setCollapsed(collapsed);
+  };
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+        <div className="logo" >
+          {!collapsed ? <span style={{ display: 'flex', marginLeft: 15, marginTop: 15, fontFamily: 'Montserrat' }} >
+            <p style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }} >Hire</p><p style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6A3D' }} >Lab</p>
+          </span> : null}
+        </div>
+        <Menu theme="dark" mode="inline" style={{ fontSize: 16 }} >
+          <Menu.Item icon={<PieChartOutlined style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} />}><Link to='/admin/dashboard' style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} >DashBoard</Link></Menu.Item>
+          <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} >Job</Link></Menu.Item>
+          <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item>
+          <Menu.Item icon={<LogoutOutlined />}>LogOut</Menu.Item>
+        </Menu>
+      </Sider>
+      <Layout className="site-layout">
+        <Header className="site-layout-background" style={{ padding: 0, backgroundColor: "#f7f8f9" }} >
+          <div style={{ display: 'flex', justifyContent: "flex-end", marginRight: 10 }} >
+            <div style={{ display: 'flex', justifyContent: 'center' }} >
+              <Button onClick={() => setVisible(true)} style={{ borderRadius: 8, backgroundColor: '#E7DCDC', alignSelf: 'center' }} >
+                <PlusCircleOutlined style={{ fontSize: 20, alignSelf: 'center', color: '#FF6A3D' }} />
+              </Button>
+              <h3 style={{ marginLeft: 20 }} >Company Name</h3>
+            </div>
+          </div>
+        </Header>
+        <Content >
+          <div className="site-layout-background">
+            {props.children}
+            <PopupBox visible={visible} handleok={handleok} handlecancel={handlecancel} />
+          </div>
+        </Content>
+      </Layout>
+    </Layout>
+  );
+}

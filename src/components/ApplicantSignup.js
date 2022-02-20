@@ -35,6 +35,15 @@ function ApplicantSignup() {
             console.log(url)
             await dispatch(registerApplicant(email, password, firstName, lastName, city, job, url))
             setLoading(false)
+            toast.success("Account created Successfully.Please goto Login Page", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }
         catch (err) {
             console.log(err.message)
@@ -116,7 +125,7 @@ function ApplicantSignup() {
                     <Tabs.TabPane tab="3" key="3">
                         <form>
                             <label>Upload Resume</label>
-                            <Input onChange={x => setFile(x.target.files[0])} type={'file'} />
+                            <Input onChange={x => { setFile(x.target.files[0]); console.log(x.target.files) }} type={'file'} />
                             <p style={{ marginTop: 20 }} >Note: Whenever you apply to a job, this is the
                                 resume that the employer will see.
                                 Always make sure it is up to date.</p>
