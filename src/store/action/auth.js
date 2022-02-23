@@ -118,6 +118,7 @@ export const LoginHandler = (email, password, option) => {
         }
         console.log(data)
         localStorage.setItem('data', JSON.stringify(data))
+        console.log(resData.localId)
         dispatch({ type: 'LOGIN_USER', token: resData.idToken, uid: resData.localId, admin: option })
     }
 }

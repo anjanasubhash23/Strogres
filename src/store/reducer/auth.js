@@ -9,7 +9,7 @@ export const UserHandler = (state = initialState, action) => {
     switch (action.type) {
         case "LOGIN_USER": {
             return {
-                uid: action.uid,
+                userid: action.uid,
                 token: action.token,
                 admin: action.admin
             }
@@ -17,14 +17,14 @@ export const UserHandler = (state = initialState, action) => {
         case 'REGISTER_COMPANY': {
             return {
                 ...state,
-                uid: action.uid,
+                userid: action.uid,
                 token: action.token
             }
         }
         case 'REGISTER_APPLICANT': {
             return {
                 ...state,
-                uid: action.uid,
+                userid: action.uid,
                 token: action.token
             }
         }

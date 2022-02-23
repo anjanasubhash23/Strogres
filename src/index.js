@@ -6,8 +6,10 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { UserHandler } from './store/reducer/auth';
 import ReduxThunk from 'redux-thunk'
+import JobHandler from './store/reducer/job';
 const reducer = combineReducers({
-  auth: UserHandler
+  auth: UserHandler,
+  job: JobHandler
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk))
