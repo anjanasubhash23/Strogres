@@ -22,7 +22,7 @@ export const RegisterCompany = (companyname, email, password, hrname, about) => 
         }
         const resData = await response.json()
         localStorage.setItem('data', JSON.stringify({
-            token: resData.token
+            token: resData.idToken
         }))
         const uid = resData.localId
         const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/CompanyData.json`, {
@@ -37,7 +37,7 @@ export const RegisterCompany = (companyname, email, password, hrname, about) => 
         })
         const resData2 = await response2.json()
         dispatch({
-            type: "REGISTER_COMPANY", uid: resData.localId, token: resData.token, data: {
+            type: "REGISTER_COMPANY", uid: resData.localId, token: resData.idToken, data: {
                 id: resData2.id,
                 companyname,
                 email,
@@ -68,7 +68,7 @@ export const registerApplicant = (email, password, firstname, lastname, city, jo
         }
         const resData = await response.json()
         localStorage.setItem('data', JSON.stringify({
-            token: resData.token
+            token: resData.idToken
         }))
         const uid = resData.localId
 
@@ -87,7 +87,7 @@ export const registerApplicant = (email, password, firstname, lastname, city, jo
         })
         const resData2 = await response2.json()
         dispatch({
-            type: "REGISTER_APPLICANT", uid: resData.localId, token: resData.token, data: {
+            type: "REGISTER_APPLICANT", uid: resData.localId, token: resData.idToken, data: {
                 id: resData2.id,
                 firstname,
                 lastname,
@@ -101,7 +101,7 @@ export const registerApplicant = (email, password, firstname, lastname, city, jo
     }
 }
 
-export const LoginHandler = (email, password) => {
+export const LoginHandler = (email, password, option) => {
     return async dispatch => {
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD8nN8qN-nzR39dajT5wEalzdwML9scQ0U', {
             method: 'POST',
@@ -113,10 +113,22 @@ export const LoginHandler = (email, password) => {
             })
         })
         const resData = await response.json()
-        localStorage.setItem('data', JSON.stringify({
-            token: resData.token
-        }))
-        dispatch({ type: 'LOGIN_USER', token: resData.token, uid: resData.localId })
+        const data = {
+            token: resData.idToken
+        }
+        console.log(data)
+        localStorage.setItem('data', JSON.stringify(data))
+        console.log(resData.localId)
+        dispatch({ type: 'LOGIN_USER', token: resData.idToken, uid: resData.localId, admin: option })
+    }
+}
+
+export const LogOut = () => {
+    return async dispatch => {
+        const data = JSON.parse(localStorage.getItem('data'))
+        data['token'] = " "
+        localStorage.setItem('data', JSON.stringify(data))
+        dispatch({ type: "LOGOUT" })
     }
 }
 

@@ -1,47 +1,72 @@
 import React, { useState } from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
-import "antd/dist/antd.css";
+import { Button, Layout, Menu } from "antd";
 import {
   PieChartOutlined,
-  InboxOutlined,
   LogoutOutlined,
   PrinterOutlined,
+  FileDoneOutlined,
+  PlusCircleOutlined
 } from "@ant-design/icons";
-import WorkIcon from "@mui/icons-material/Work";
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from "react-router";
+import "./SideDrawer.css"
+import { Link } from "react-router-dom";
+import PopupBox from "./PopupBox";
+import { useDispatch } from "react-redux";
+import { LogOut } from "../store/action/auth";
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
+
 
 export default function SideDrawer(props) {
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate()
-
+  const [visible, setVisible] = useState(false)
+  const location = useLocation()
+  console.log(location)
+  const handleok = value => {
+    setVisible(value)
+  }
+  const handlecancel = value => {
+    setVisible(value)
+  }
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const logout = async () => {
+    await dispatch(LogOut())
+    navigate('/')
+  }
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item onClick={() => navigate('/dashboard')} icon={<PieChartOutlined />}>DashBoard</Menu.Item>
-          <Menu.Item icon={<InboxOutlined />}>Inbox</Menu.Item>
-          <Menu.Item icon={<WorkIcon />}>Job </Menu.Item>
-          <Menu.Item icon={<PrinterOutlined />}>Parse Resume</Menu.Item>
-          <Menu.Item icon={<LogoutOutlined />}>LogOut</Menu.Item>
+        <div className="logo" >
+          {!collapsed ? <span style={{ display: 'flex', marginLeft: 15, marginTop: 15, fontFamily: 'Montserrat' }} >
+            <p style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }} >Hire</p><p style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6A3D' }} >Lab</p>
+          </span> : null}
+        </div>
+        <Menu theme="dark" mode="inline" style={{ fontSize: 16 }} >
+          <Menu.Item icon={<PieChartOutlined style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} />}><Link to='/admin/dashboard' style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} >DashBoard</Link></Menu.Item>
+          <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} >Job</Link></Menu.Item>
+          <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item>
+          <Menu.Item onClick={logout} icon={<LogoutOutlined />}>LogOut</Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
-          Hire Lab
+        <Header className="site-layout-background" style={{ padding: 0, backgroundColor: "#f7f8f9" }} >
+          <div style={{ display: 'flex', justifyContent: "flex-end", marginRight: 10 }} >
+            <div style={{ display: 'flex', justifyContent: 'center' }} >
+              <Button onClick={() => setVisible(true)} style={{ borderRadius: 8, backgroundColor: '#E7DCDC', alignSelf: 'center' }} >
+                <PlusCircleOutlined style={{ fontSize: 20, alignSelf: 'center', color: '#FF6A3D' }} />
+              </Button>
+              <h3 style={{ marginLeft: 20 }} >Company Name</h3>
+            </div>
+          </div>
         </Header>
-        <Content style={{ margin: "0 16px" }}>
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 360 }}
-          >
-            {props.body}
+        <Content >
+          <div className="site-layout-background">
+            {props.children}
+            <PopupBox visible={visible} handleok={handleok} handlecancel={handlecancel} />
           </div>
         </Content>
       </Layout>

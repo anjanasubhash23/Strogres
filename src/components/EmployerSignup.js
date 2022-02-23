@@ -19,6 +19,15 @@ function EmployerSignup() {
             setLoading(true)
             await dispatch(RegisterCompany(company, email, password, hrname, about))
             setLoading(false)
+            toast.success("Account created Successfully.Please goto Login Page", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }
         catch (err) {
             toast.error(err.message, {
