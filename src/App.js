@@ -9,6 +9,7 @@ import ParserResume from './pages/Admin/ParserResume';
 import AdminJob from './pages/Admin/AdminJob';
 import ProtectedRoutes from './components/ProtectRoutes';
 import CheckUser from './pages/CheckUser';
+import JobApplicants from './pages/Admin/JobApplicants';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/admin/job' element={<ProtectedRoutes><AdminJob /></ProtectedRoutes>} />
         <Route path='/admin/dashboard' element={<ProtectedRoutes><DashBoard /></ProtectedRoutes>} />
         <Route path='/admin/parse' element={<ProtectedRoutes><ParserResume /></ProtectedRoutes>} />
+        <Route path ='/admin/job/:type' element = {<ProtectedRoutes><JobApplicants /></ProtectedRoutes>} />
       </Routes>
     </BrowserRouter>
   );
