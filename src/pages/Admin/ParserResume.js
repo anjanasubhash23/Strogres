@@ -10,6 +10,25 @@ function ParserResume() {
     const [files, setFiles] = useState()
     const [upload, setUpload] = useState(false)
     console.log(files)
+    const uploadData = async () => {
+        const response = await fetch("/extracttext", {
+            method: "POST",
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify({
+                file: files
+            })
+        })
+        const resData = await response.json()
+        console.log(resData.data)
+        // const response1 = await fetch("/extractData", {
+        //     method: "POST",
+        //     headers: { "Content-Type": 'application/json' },
+        //     body: JSON.stringify({
+        //         text:resData.data
+        //     })
+        // })
+        // const resData = await response.json()
+    }
     return (
         <SideDrawer>
             <div style={{ height: '100vh', fontFamily: "montserrat", justifyContent: "center", display: 'flex', alignItems: 'center' }} >
@@ -25,7 +44,7 @@ function ParserResume() {
                             </div>
                         </div>
                         <div style={{ margin: 10 }} >
-                            {files === undefined || files.length === 0 ? null : <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button>}
+                            {files === undefined || files.length === 0 ? null : <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={uploadData} >Parse</Button>}
                         </div>
                     </div>
 

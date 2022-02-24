@@ -25,3 +25,9 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode) 
         })
     }
 }
+
+export const fetchJob = () => {
+    return async dispatch => {
+
+    }
+}
