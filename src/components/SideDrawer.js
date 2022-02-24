@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Layout, Menu } from "antd";
 import {
   PieChartOutlined,
@@ -7,7 +7,7 @@ import {
   FileDoneOutlined,
   PlusCircleOutlined
 } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import "./SideDrawer.css"
 import { Link } from "react-router-dom";
 import PopupBox from "./PopupBox";
@@ -18,8 +18,12 @@ const { Header, Content, Sider } = Layout;
 
 
 export default function SideDrawer(props) {
+  const { type } = useParams();
+  console.log(type)
+
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false)
+  const[urlType,setUrlType] = useState('');
   const location = useLocation()
   console.log(location)
   const handleok = value => {
@@ -37,6 +41,15 @@ export default function SideDrawer(props) {
     await dispatch(LogOut())
     navigate('/')
   }
+  // useEffect(() => {
+  //   setUrlType(type)
+  //   console.log(urlType)
+  //   let str = urlType.trim();
+  //   str = str.replaceAll(" ", "%20");
+  //   console.log('%%%%%',str)
+  //   setUrlType(str)
+  // })
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -47,7 +60,7 @@ export default function SideDrawer(props) {
         </div>
         <Menu theme="dark" mode="inline" style={{ fontSize: 16 }} >
           <Menu.Item icon={<PieChartOutlined style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} />}><Link to='/admin/dashboard' style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} >DashBoard</Link></Menu.Item>
-          <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === '/admin/job' ? "white" : 'grey' }} >Job</Link></Menu.Item>
+          <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === `/admin/job/${type}` || location.pathname === `/admin/job` ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === `/admin/job/${type}` || location.pathname === `/admin/job` ? "white" : 'grey' }} >Job</Link></Menu.Item>
           <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item>
           <Menu.Item onClick={logout} icon={<LogoutOutlined />}>LogOut</Menu.Item>
         </Menu>
