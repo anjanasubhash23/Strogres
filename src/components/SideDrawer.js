@@ -11,7 +11,7 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import "./SideDrawer.css"
 import { Link } from "react-router-dom";
 import PopupBox from "./PopupBox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../store/action/auth";
 
 const { Header, Content, Sider } = Layout;
@@ -19,13 +19,11 @@ const { Header, Content, Sider } = Layout;
 
 export default function SideDrawer(props) {
   const { type } = useParams();
-  console.log(type)
-
+  const data = useSelector(x => x.auth.userData)
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false)
-  const[urlType,setUrlType] = useState('');
+  const [urlType, setUrlType] = useState('');
   const location = useLocation()
-  console.log(location)
   const handleok = value => {
     setVisible(value)
   }
@@ -55,7 +53,7 @@ export default function SideDrawer(props) {
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className="logo" >
           {!collapsed ? <span style={{ display: 'flex', marginLeft: 15, marginTop: 15, fontFamily: 'Montserrat' }} >
-            <p style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }} >Hire</p><p style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6A3D' }} >Lab</p>
+            <p style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }} >Stro</p><p style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6A3D' }} >gres</p>
           </span> : null}
         </div>
         <Menu theme="dark" mode="inline" style={{ fontSize: 16 }} >
@@ -67,12 +65,12 @@ export default function SideDrawer(props) {
       </Sider>
       <Layout className="site-layout">
         <Header className="site-layout-background" style={{ padding: 0, backgroundColor: "#f7f8f9" }} >
-          <div style={{ display: 'flex', justifyContent: "flex-end", marginRight: 10 }} >
+          <div style={{ display: 'flex', justifyContent: "flex-end", marginRight: 20 }} >
             <div style={{ display: 'flex', justifyContent: 'center' }} >
               <Button onClick={() => setVisible(true)} style={{ borderRadius: 8, backgroundColor: '#E7DCDC', alignSelf: 'center' }} >
                 <PlusCircleOutlined style={{ fontSize: 20, alignSelf: 'center', color: '#FF6A3D' }} />
               </Button>
-              <h3 style={{ marginLeft: 20 }} >Company Name</h3>
+              <h3 style={{ marginLeft: 20 }} >{data.name}</h3>
             </div>
           </div>
         </Header>

@@ -21,6 +21,17 @@ const JobHandler = (state = initialState, action) => {
 
             }
         }
+        case "FETCH_JOB": {
+            return {
+                ...state,
+                job: action.data
+            }
+        }
+        case "DELETE_JOB": {
+            return {
+                job: state.job.filter(x => x.id !== action.id)
+            }
+        }
         default: return state
 
     }

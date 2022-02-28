@@ -1,37 +1,72 @@
-import { Button, Input, Switch } from 'antd'
+import { Button, Input, Spin, Switch } from 'antd'
 import React, { useState } from 'react'
 import SideDrawer from '../../components/SideDrawer'
 import './parserresume.css'
-import {
-    InboxOutlined
-} from "@ant-design/icons";
+import { InboxOutlined } from "@ant-design/icons";
+import { toast, ToastContainer } from 'react-toastify';
+import app from '../../firebase'
+import { useDispatch } from 'react-redux'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { parseResume } from '../../store/action/job';
 
 function ParserResume() {
     const [files, setFiles] = useState()
     const [upload, setUpload] = useState(false)
-    console.log(files)
-    const uploadData = async () => {
-        const response = await fetch("/extracttext", {
-            method: "POST",
-            headers: { "Content-Type": 'application/json' },
+    const [loading, setLoading] = useState(false)
+    const storageRef = getStorage(app)
+    const dispatch = useDispatch()
+    const extractdata = async (url) => {
+        const response = await fetch('/extract', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                file: files
+                url: url
             })
         })
         const resData = await response.json()
-        console.log(resData.data)
-        // const response1 = await fetch("/extractData", {
-        //     method: "POST",
-        //     headers: { "Content-Type": 'application/json' },
-        //     body: JSON.stringify({
-        //         text:resData.data
-        //     })
-        // })
-        // const resData = await response.json()
+        console.log(resData)
+    }
+    const uploadData = async () => {
+        try {
+            setLoading(true)
+            if (upload) {
+                console.log(files)
+            }
+            else {
+                const reff = ref(storageRef, `/Resume/${files[0].name}`);
+                await uploadBytesResumable(reff, files[0])
+                const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${files[0].name}`))
+                //await extractdata(url)
+                await dispatch(parseResume(url))
+            }
+            setLoading(false)
+            toast.success("File Uploaded", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+        }
+        catch (err) {
+            toast.error(err.messsage, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+        }
     }
     return (
         <SideDrawer>
             <div style={{ height: '100vh', fontFamily: "montserrat", justifyContent: "center", display: 'flex', alignItems: 'center' }} >
+                <ToastContainer />
+
                 <div style={{ height: '80vh', width: '70vw', backgroundColor: '#F8F3EF', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                     <div style={{ textAlign: 'center' }} >
                         <InboxOutlined style={{ fontSize: 50 }} />

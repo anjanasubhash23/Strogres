@@ -19,7 +19,7 @@ function ApplicantSignup() {
     const [file, setFile] = useState()
     const [activeKey, setactiveKey] = useState("1")
     const [loading, setLoading] = useState(false)
-    const [url, setUrl] = useState()
+    // const [url, setUrl] = useState()
     const [job1, setjob1] = useState()
     const [job2, setjob2] = useState()
     const [city1, setcity1] = useState()
@@ -31,7 +31,7 @@ function ApplicantSignup() {
             setLoading(true)
             const reff = ref(storageRef, `/Resume/${firstName}`);
             await uploadBytesResumable(reff, file)
-            await getDownloadURL(ref(storageRef, `${'Resume/'}${firstName}`)).then(url => { console.log(url); setUrl(url); });
+            const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${firstName}`))
             console.log(url)
             await dispatch(registerApplicant(email, password, firstName, lastName, city, job, url))
             setLoading(false)

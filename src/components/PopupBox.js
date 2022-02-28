@@ -1,4 +1,4 @@
-import { Input, Radio, Button } from 'antd';
+import { Input, Radio, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import React, { useState } from 'react';
@@ -42,7 +42,9 @@ function PopupBox(props) {
         // re-render
         setSkills(newTags);
     };
-
+    function onChange(date, dateString) {
+        console.log(date, dateString);
+    }
     const handleTagClick = index => {
         console.log('The tag at index ' + index + ' was clicked');
     };
@@ -103,10 +105,18 @@ function PopupBox(props) {
                         handleTagClick={handleTagClick}
                     />
                 </div>
-                <Radio.Group style={{ marginTop: 30 }} onChange={x => setValue(!value)} value={0} >
-                    <Radio value={0} >Full-Time</Radio>
-                    <Radio value={1} >Part-Time</Radio>
-                </Radio.Group>
+                <div>
+                    <label style={{ marginRight: 20 }} >Mode</label>
+                    <Radio.Group style={{ marginTop: 30 }} onChange={x => setValue(!value)} value={0} >
+                        <Radio value={0} >Full-Time</Radio>
+                        <Radio value={1} >Part-Time</Radio>
+                    </Radio.Group>
+
+                </div>
+                <div style={{ marginTop: 30 }}>
+                    <label style={{ marginRight: 20 }} >Last Date to Apply</label>
+                    <DatePicker onChange={onChange} />
+                </div>
             </Modal>
         </div>);
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import "./DashBoard.css";
 import {
@@ -10,8 +10,18 @@ import {
     FileOutlined
 } from "@ant-design/icons";
 import WorkIcon from "@mui/icons-material/Work";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchJob } from "../../store/action/job";
 
 function DashBoard() {
+    const job = useSelector(x => x.job.job)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const fetch = async () => {
+            await dispatch(fetchJob())
+        }
+        fetch()
+    }, [])
     return (
         <SideDrawer>
             <div className="DashBoard">
@@ -23,7 +33,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of Job Posted</h1>
-                                <p>10</p>
+                                <p>{job.length}</p>
                             </div>
                         </div>
 
