@@ -23,6 +23,7 @@ function LoginCard() {
             setLoading(false)
         }
         catch (err) {
+            setLoading(false)
             toast.error(err.message, {
                 position: "top-right",
                 autoClose: 3000,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import "./DashBoard.css";
 import {
@@ -10,8 +10,21 @@ import {
     FileOutlined
 } from "@ant-design/icons";
 import WorkIcon from "@mui/icons-material/Work";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchJob } from "../../store/action/job";
+import { fetchcount } from "../../store/action/applicant";
 
 function DashBoard() {
+    const job = useSelector(x => x.job.job)
+    const count = useSelector(x => x.app.count)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const fetch = async () => {
+            await dispatch(fetchJob())
+            await dispatch(fetchcount())
+        }
+        fetch()
+    }, [])
     return (
         <SideDrawer>
             <div className="DashBoard">
@@ -23,7 +36,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of Job Posted</h1>
-                                <p>10</p>
+                                <p>{job.length}</p>
                             </div>
                         </div>
 
@@ -32,7 +45,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of Applicants Received</h1>
-                                <p>10</p>
+                                <p>0</p>
                             </div>
                         </div>
                     </div>
@@ -44,7 +57,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of People Hired</h1>
-                                <p>10</p>
+                                <p>0</p>
                             </div>
                         </div>
 
@@ -55,7 +68,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of Resume Parsed</h1>
-                                <p>10</p>
+                                <p>{count.length}</p>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,8 @@
 import Job from "../../model/Job"
 
 const initialState = {
-    job: []
+    job: [],
+    parseData: []
 }
 
 const JobHandler = (state = initialState, action) => {
@@ -13,7 +14,10 @@ const JobHandler = (state = initialState, action) => {
                 action.data.noOpening,
                 action.data.jobDescription,
                 action.data.skills,
-                action.data.mode
+                action.data.mode,
+                action.data.type,
+                action.data.lastdate,
+                action.data.city
             )
             return {
                 ...state,
@@ -21,6 +25,20 @@ const JobHandler = (state = initialState, action) => {
 
             }
         }
+
+        case "FETCH_JOB": {
+            return {
+                ...state,
+                job: action.data
+            }
+        }
+        case "DELETE_JOB": {
+            return {
+                ...state,
+                job: state.job.filter(x => x.id !== action.id)
+            }
+        }
+
         default: return state
 
     }

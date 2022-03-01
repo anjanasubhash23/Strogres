@@ -7,7 +7,7 @@ function AuthPage() {
         <Layout>
             <Layout.Header style={{ backgroundColor: '#1A2238' }} >
                 <div className='logo' >
-                    <span style={{ display: 'flex' }} ><h2 style={{ color: 'white', fontFamily: 'Montserrat' }} >Hire</h2><h2 style={{ color: '#FF6A3D', fontFamily: 'Montserrat' }} >Lab</h2></span>
+                    <span style={{ display: 'flex' }} ><h2 style={{ color: 'white', fontFamily: 'Montserrat' }} >Stro</h2><h2 style={{ color: '#FF6A3D', fontFamily: 'Montserrat' }} >gres</h2></span>
                 </div>
             </Layout.Header>
             <Layout.Content style={{ backgroundColor: '#1A2238', width: "100vw", height: '90.6vh' }} >

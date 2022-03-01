@@ -1,3 +1,5 @@
+import Applicant from "../../model/Applicant";
+import Company from "../../model/Company";
 
 
 export const RegisterCompany = (companyname, email, password, hrname, about) => {
@@ -71,7 +73,7 @@ export const registerApplicant = (email, password, firstname, lastname, city, jo
             token: resData.idToken
         }))
         const uid = resData.localId
-
+        console.log(url)
         const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicant/${uid}/info.json`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -122,6 +124,39 @@ export const LoginHandler = (email, password, option) => {
         dispatch({ type: 'LOGIN_USER', token: resData.idToken, uid: resData.localId, admin: option })
     }
 }
+export const AdminData = () => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.userid
+        const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/CompanyData.json`)
+        const resData = await response.json()
+        const data = []
+        for (const key in resData) {
+            data.push(new Company(key, resData[key].companyname, resData[key].email, resData[key].hrname, resData[key].about))
+        }
+        console.log(data)
+        dispatch({
+            type: "FETCH_COMPANY",
+            data: data
+        })
+    }
+}
+
+export const ApplicantData = () => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.userid
+        const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicant/${uid}/info.json`)
+        const resData = await response.json()
+        const data = []
+        for (const key in resData) {
+            data.push(new Applicant(key, resData[key].firstname, resData[key].lastname, resData[key].city, resData[key].job, resData[key].email, resData[key].url))
+        }
+        dispatch({
+            type: "FETCH_APPLICANT",
+            data: data
+        })
+    }
+}
+
 
 export const LogOut = () => {
     return async dispatch => {
