@@ -1,3 +1,4 @@
+import { Spin } from 'antd'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
@@ -22,7 +23,9 @@ function CheckUser() {
         checkuser()
     })
     return (
-        <div></div>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', textAlign: 'center' }} >
+            <Spin size='large' style={{ color: '#FF6A3D' }} />
+        </div>
     )
 }
 

@@ -10,6 +10,7 @@ function AdminJob() {
     const job = useSelector(x => x.job.job)
     const [load, setLoad] = useState(false)
     const dispatch = useDispatch()
+
     useEffect(() => {
         const fetch = async () => {
             setLoad(true)
@@ -30,25 +31,26 @@ function AdminJob() {
     return (
         <SideDrawer>
             <div style={{ height: '90vh', backgroundColor: 'white' }} >
-                <h1 style={{ padding: 20, fontSize: 25 }} >Job Posted</h1>
+                <h2 style={{ padding: 20 }} >Job Posted</h2>
 
-                {job.length === 0 ? <div>
+                {job.length === 0 ? <div style={{ position: 'absolute', top: '50%', left: '50%' }} >
                     <h2>No Job Opening Added Yet</h2>
-                </div> : job.map(x => {
+                </div> : <div style={{
+
+                    display: "grid",
+                    width: "90%",
+                    marginLeft: "1%",
+                    gridTemplateColumns: "repeat(6,auto)",
+                    listStyle: "none",
+                    gridGap: "1vw",
+                    marginTop: "2vh",
+                    marginBottom: "8vh",
+                }}> {job.map(x => {
                     return (
-                        <div style={{
-                            padding: 30, display: "grid",
-                            width: "80%",
-                            marginLeft: "7%",
-                            gridTemplateColumns: "repeat(4,auto)",
-                            listStyle: "none",
-                            gridGap: "3vw",
-                            marginTop: "2vh",
-                            marginBottom: "8vh",
-                        }}>
-                            <JobCard jobPost={x.jobPost} description={x.jobDescription} skills={x.skills} mode={x.mode} />
-                        </div>)
-                })}
+
+                        <JobCard data={x} />
+                    )
+                })}</div>}
 
             </div>
         </SideDrawer>

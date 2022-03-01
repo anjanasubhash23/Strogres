@@ -6,19 +6,29 @@ import './JobApplicant.css'
 import FileViewer from 'react-file-viewer';
 
 export default function JobApplicants(props) {
-  const { type } = useParams();
+  const newData = []
+
   const [openPanel, setOpenPanel] = useState(false)
   const data = useLocation()
+  if (data.state.info.skills.length !== 0) {
+    data.state.info.skills.map(x => { newData.push(x.text); return 0; })
+  }
   const [option, setOption] = useState(false)
+  console.log(data.state.info)
   return (
     <SideDrawer>
-      <div className="JobApplicants">
+      <div className="JobApplicants" style={{fontFamily:'Montserrat'}} >
         <div className="job-subContainer">
 
-          <h1 style={{ fontSize: 25 }} >{type}</h1>
-          <p>Mode: {data.state.mode === 0 ? "Full Time" : "Part Time"}</p>
-          <p>Job Description: {data.state.description}</p>
-          <p>Skills Required:{data.state.skills.length !== 0 ? data.state.skills.map(x => { return <p>{x.text}</p> }) : ""} </p>
+          <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+            <p>Time: {data.state.info.mode === 0 ? "Full Time" : "Part Time"}</p>
+            <p>Mode: {data.state.info.type === 0 ? "WFH" : "On-Site"}</p>
+            {data.state.info.type === 1 ? <p>Location: {data.state.info.city}</p> : null}
+            <p>Last Date to Apply: {data.state.info.lastdate}</p>
+          </div>
+          <p>Job Description: {data.state.info.jobDescription}</p>
+          <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
           <div className="job-tableContainer">
             <table className='job-table'>
               <tr>

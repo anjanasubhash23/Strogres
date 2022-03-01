@@ -1,6 +1,6 @@
 import Job from "../../model/Job"
 
-export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode) => {
+export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode, type, lastdate, city) => {
     return async (dispatch, getState) => {
         const uid = getState().auth.userid
         const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/jobs.json`, {
@@ -11,10 +11,29 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode) 
                 noOpening,
                 jobDescription,
                 skills,
-                mode
+                mode,
+                type,
+                lastdate,
+                city
             })
         })
         const resData = await response.json()
+        await fetch('https://resume-parser-bf8d9-default-rtdb.firebaseio.com/JobPost.json', {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jobId: resData.name,
+                companyId: uid,
+                jobPost,
+                noOpening,
+                jobDescription,
+                skills,
+                mode,
+                type,
+                lastdate,
+                city
+            })
+        })
         dispatch({
             type: "ADD_JOB", data: {
                 id: resData.name,
@@ -22,7 +41,10 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode) 
                 noOpening,
                 jobDescription,
                 skills,
-                mode
+                mode,
+                type,
+                lastdate,
+                city
             }
         })
     }
@@ -49,7 +71,7 @@ export const fetchJob = () => {
         const job = []
         for (const key in resData) {
             const data = new Job(key, resData[key].jobPost, resData[key].noOpening,
-                resData[key].jobDescription, resData[key].skills, resData[key].mode)
+                resData[key].jobDescription, resData[key].skills, resData[key].mode, resData[key].type, resData[key].lastdate, resData[key].city)
             job.push(data)
         }
         dispatch({
@@ -59,17 +81,4 @@ export const fetchJob = () => {
     }
 }
 
-export const parseResume = (url) => {
-    return async (dispatch, getState) => {
-        const response = await fetch('/extractData', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                url: url
-            })
-        })
-        const resData = await response.json()
-        console.log(resData)
-        dispatch({ type: "PARSE_RESUME", data: resData })
-    }
-}
+

@@ -2,7 +2,7 @@
   "name": "intern-student",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:5000",
+  "proxy": "http://127.0.0.1:8081",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/runtime": "^7.17.2",
@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.18.6",
     "babel": "^6.23.0",
+    "cities.json": "^1.1.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "emotion": "^11.0.0",
