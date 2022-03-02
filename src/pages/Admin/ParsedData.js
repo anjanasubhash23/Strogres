@@ -29,7 +29,10 @@ function ParsedData() {
     }
     return (
         <SideDrawer>
-            <ParseDetails parsedata={data} />
+            <div style={{ height: '100vh', maxHeight: '100vh', overflow: 'auto', fontFamily: "montserrat", justifyContent: "center", display: 'flex', alignItems: 'center' }} >
+                <ParseDetails parsedata={data} />
+            </div>
+
         </SideDrawer>
     )
 }

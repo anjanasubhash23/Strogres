@@ -1,24 +1,55 @@
 import { Button } from 'antd';
 import React, { useState } from 'react'
 import { FileViewer } from 'react-file-viewer';
-import { useDispatch } from 'react-redux';
 import { SidePane } from 'react-side-pane';
 import { LeftOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router";
 import "./ParseDetails.css"
+import { toast, ToastContainer } from 'react-toastify';
 
 function ParseDetails(props) {
     const [option, setOption] = useState(false)
     const [openPanel, setOpenPanel] = useState(false)
     const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
     const location = useLocation()
-    const dispatch = useDispatch()
-    // const sendMail = async () => {
-
-    // }
+    const sendMail = async () => {
+        try {
+            setLoading(true)
+            await fetch('/sendMail', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    mail: data.parsedata["EMAIL ADDRESS"]
+                })
+            })
+            setLoading(false)
+            toast.success("EMAIL SENT", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+        }
+        catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+        }
+    }
     console.log(props.parsedata)
     return (
         <div className='table-container' >
+            <ToastContainer />
             {location.pathname !== '/admin/parsedata' ? <div style={{ display: 'flex' }} onClick={() => props.onchange(false)} >
                 <LeftOutlined style={{ color: '#f8643c', fontSize: 25 }} />
                 <p>More Resume Parsing</p>
@@ -26,7 +57,7 @@ function ParseDetails(props) {
             <div>
                 <h2>Parsed Resume Details</h2>
             </div>
-            <div className="job-tableContainer">
+            <div className="job-tableContainer"  >
                 <table className='job-table'>
                     {props.parsedata.map(x => {
                         return (
@@ -49,7 +80,7 @@ function ParseDetails(props) {
                             <p style={{ padding: 0, margin: 0 }} >{data.parsedata.DESIGNATION}</p>
                             <p style={{ padding: 0, margin: 0 }} >{data.parsedata["EMAIL ADDRESS"]}</p>
                         </div>
-                        <Button style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
+                        <Button loading={loading} onClick={sendMail} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
                     </div>
                     <div style={{ display: 'flex' }} >
                         <div onClick={() => { setOption(!option) }} style={{ fontFamily: 'Montserrat', textAlign: 'center', width: '50%', color: !option ? '#FFFFFF' : 'black', backgroundColor: !option ? '#FF6A3D' : 'grey', padding: 8 }} >Details</div>

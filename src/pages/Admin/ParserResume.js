@@ -21,11 +21,25 @@ function ParserResume() {
     const onchange = (p) => {
         setChange(p)
     }
+    console.log(upload, files)
     const uploadData = async () => {
         try {
             setLoading(true)
             if (upload) {
-                console.log(files)
+                console.log("...")
+                for (let i = 0; i < files.length; i++) {
+                    if (change === false) {
+                        if (parsedata.length !== 0) {
+                            setChange(true)
+                        }
+                        console.log(change)
+                    }
+                    const reff = ref(storageRef, `/Resume/${files[i].name}`);
+                    await uploadBytesResumable(reff, files[i])
+                    const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${files[i].name}`))
+                    console.log(url)
+                    await dispatch(parseResume(url))
+                }
             }
             else {
                 console.log("uploading......")
@@ -56,7 +70,9 @@ function ParserResume() {
                 <ToastContainer />
 
                 {change ?
-                    <ParseDetails parsedata={parsedata} onchange={onchange} />
+                    <div style={{ height: '100vh', maxHeight: '100vh', overflow: 'auto' }} >
+                        <ParseDetails parsedata={parsedata} onchange={onchange} />
+                    </div>
                     : <div style={{ height: '80vh', width: '70vw', backgroundColor: '#F8F3EF', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                         <div style={{ textAlign: 'center' }} >
                             <InboxOutlined style={{ fontSize: 50 }} />
