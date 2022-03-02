@@ -2,7 +2,8 @@ import Job from "../../model/Job"
 
 const initialState = {
     job: [],
-    parseData: []
+    parseData: [],
+    appJob: []
 }
 
 const JobHandler = (state = initialState, action) => {
@@ -36,6 +37,12 @@ const JobHandler = (state = initialState, action) => {
             return {
                 ...state,
                 job: state.job.filter(x => x.id !== action.id)
+            }
+        }
+        case "DISPLAY_JOB": {
+            return {
+                ...state,
+                appJob: action.data
             }
         }
 

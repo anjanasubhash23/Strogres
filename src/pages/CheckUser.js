@@ -16,7 +16,7 @@ function CheckUser() {
         }
         else {
             await dispatch(ApplicantData())
-            navigate(`/applicant/dashboard`)
+            navigate(`/user/dashboard`)
         }
     }
     useEffect(() => {

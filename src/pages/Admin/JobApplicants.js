@@ -1,23 +1,33 @@
-import React, { useState } from 'react'
-import { useLocation, useParams } from "react-router";
+import React, { useState, useEffect } from 'react'
+import { useLocation } from "react-router";
 import { SidePane } from 'react-side-pane';
 import SideDrawer from "../../components/SideDrawer";
 import './JobApplicant.css'
 import FileViewer from 'react-file-viewer';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchcount } from "../../store/action/applicant"
 
 export default function JobApplicants(props) {
   const newData = []
-
+  const applicant = useSelector(x => x.app.count)
   const [openPanel, setOpenPanel] = useState(false)
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
     data.state.info.skills.map(x => { newData.push(x.text); return 0; })
   }
   const [option, setOption] = useState(false)
-  console.log(data.state.info)
+  const dispatch = useDispatch()
+  const fetchdata = async () => {
+    await dispatch(fetchcount())
+  }
+  useEffect(() => {
+    fetchdata()
+  }, [])
+  const appdata = applicant.filter(x => x.jobid === data.state.info.id)
+  console.log(appdata, data.state.info, applicant)
   return (
     <SideDrawer>
-      <div className="JobApplicants" style={{fontFamily:'Montserrat'}} >
+      <div className="JobApplicants" style={{ fontFamily: 'Montserrat' }} >
         <div className="job-subContainer">
 
           <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
@@ -30,28 +40,20 @@ export default function JobApplicants(props) {
           <p>Job Description: {data.state.info.jobDescription}</p>
           <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
           <div className="job-tableContainer">
-            <table className='job-table'>
-              <tr>
-                <td>Alfreds Futterkiste</td>
-                <td onClick={() => setOpenPanel(true)} >View Details</td>
-                <td>Remove</td>
-                <td>Send Mail</td>
-              </tr>
-
-              <tr>
-                <td>Alfreds Futterkistdadadadadadade</td>
-                <td>View Details</td>
-                <td>Remove</td>
-                <td>Send Mail</td>
-              </tr>
-
-              <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>View Details</td>
-                <td>Remove</td>
-                <td>Send Mail</td>
-              </tr>
-            </table>
+            {appdata ? <table className='job-table'>
+              {appdata.map(x => {
+                return (
+                  <tr>
+                    <td>{x.parsedata.NAME}</td>
+                    <td onClick={() => setOpenPanel(true)} >View Details</td>
+                    <td>Remove</td>
+                    <td>Send Mail</td>
+                  </tr>
+                )
+              })}
+            </table> : <div style={{ postion: 'absolute', top: '50%', left: '50%' }} >
+              <h2>No Application Received Yet</h2>
+            </div>}
           </div>
           <SidePane open={openPanel} width={50} onClose={() => setOpenPanel(false)}>
             <div>

@@ -3,34 +3,47 @@ import { Button, Layout, Menu, Breadcrumb, Dropdown } from "antd";
 import "./TopNavBar.css"
 
 import {
-UserOutlined
+  UserOutlined
 } from "@ant-design/icons";
+import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router";
+import { useDispatch, useSelector } from 'react-redux';
+import { LogOut } from '../../store/action/auth';
 
 const { Header, Content, Footer } = Layout;
 
 export default function TopNavBar(props) {
-    const menu = (
-      <Menu>
-        <Menu.Item>
-          <a href="/admin/job">Edit Profile</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a href="/admin/job">Log Out</a>
-        </Menu.Item>
-      </Menu>
-    );
+  const data = useSelector(x => x.auth.userData)
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const logout = async () => {
+    await dispatch(LogOut())
+    navigate('/')
+  }
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <a href="/admin/job">Edit Profile</a>
+      </Menu.Item>
+      <Menu.Item onClick={logout} >
+        Log Out
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
-    <Layout>
+    <Layout style={{ fontFamily: 'Montserrat' }} >
       <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
         <div>
-          <span style={{ display: 'flex', left:20, marginTop: 0, fontFamily: 'Montserrat', position:'absolute' }} >
+          <span style={{ display: 'flex', left: 20, marginTop: 0, fontFamily: 'Montserrat', position: 'absolute' }} >
             <p style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }} >Stro</p><p style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6A3D' }} >gres</p>
           </span>
         </div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item  key="1">Explore</Menu.Item>
-          <Menu.Item key="2">My Applications</Menu.Item>
+        <Menu theme="dark" mode="horizontal" >
+
+          <Menu.Item ><Link to='/user/explore' style={{ color: location.pathname === '/user/explore' ? "white" : 'grey' }} >Explore</Link></Menu.Item>
+          <Menu.Item ><Link to='/user/dashboard' style={{ color: location.pathname === '/user/dashboard' ? "white" : 'grey' }} >My Application</Link></Menu.Item>
         </Menu>
         <Dropdown
           className="navbarDropdown"
@@ -43,7 +56,7 @@ export default function TopNavBar(props) {
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
             >
-              Praful Kumar
+              {data.name}
             </a>
           </div>
         </Dropdown>

@@ -1,6 +1,7 @@
 const initialState = {
     parseData: [],
-    count: []
+    count: [],
+    applied: []
 }
 
 const ApplicantHandler = (state = initialState, action) => {
@@ -17,6 +18,18 @@ const ApplicantHandler = (state = initialState, action) => {
             return {
                 ...state,
                 count: action.data
+            }
+        }
+        case "APPLY_DATA": {
+            return {
+                ...state,
+                applied: action.data
+            }
+        }
+        case "FETCH_APPLIED_DATA": {
+            return {
+                ...state,
+                applied: action.data
             }
         }
         default: return state
