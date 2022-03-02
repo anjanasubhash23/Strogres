@@ -1,0 +1,42 @@
+:root {
+  --clr-primary-300: #f3eed9;
+  --clr-primary-400: #f8643c;
+  --clr-primary-500: #ff3700;
+  --clr-primary-600: #db3000;
+}
+
+::before ::after {
+  box-sizing: border-box;
+}
+
+.job-table > tr>td:nth-child(1),
+.job-table > tr>td:nth-child(2),
+.job-table > tr>td:nth-child(3),
+.job-table > tr>td:nth-child(4){
+  pointer-events: none;
+}
+
+.ant-layout-content.site-layout {
+  padding: 0px 0px !important;
+  margin-top: 64px !important;
+}
+
+.job-tableContainer > h1 {
+  font-size: 30px;
+  text-align: center;
+  padding-top: 5vw;
+}
+
+.job-table > tr > td:nth-child(5):hover {
+  cursor:pointer;
+  color: blue;
+  opacity: 0.6;
+  transition: 0.3s;
+  
+}
+
+.MyApplication{
+    padding-left: 5%;
+    background-color: white;
+    padding-right: 5%;
+}

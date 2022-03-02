@@ -1,0 +1,51 @@
+:root {
+  --clr-primary-300: #f3eed9;
+  --clr-primary-400: #f8643c;
+  --clr-primary-500: #ff3700;
+  --clr-primary-600: #db3000;
+}
+
+::before ::after {
+  box-sizing: border-box;
+}
+
+.JobDetails > * {
+  background-color: white;
+}
+
+.ant-layout-content.site-layout {
+  padding: 0px 0px !important;
+  margin-top: 64px !important;
+  background-color: white;
+}
+
+.Explore-jobOverview:first-child {
+  border-width: 0px 0px 2px 0px;
+  border-radius: 0px 0px 0px 0px;
+}
+
+.jobOverview_button_container > button {
+  font-size: 18px;
+  padding-inline: 20px;
+}
+
+.jobOverview_description > div > p {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.JobDetails-description {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem 12rem;
+}
+
+.JobDetails-description > h1 {
+    font-size: 25px;
+    color: rgb(59, 59, 59);
+}
+
+.JobDetails-description > p {
+    font-size: medium;
+}

@@ -39,6 +39,14 @@
       font-size: large;
   }
 
+  .job-table > tr > th {
+    padding: 20px;
+    border: 1px solid #ddd;
+    text-align: left;
+    background-color: var(--clr-primary-400);
+    color: white;
+  }
+
 
   .job-table > tr > td:first-child { font-weight: 400; }
   
