@@ -5,6 +5,7 @@ import TopNavBar from './TopNavBar';
 import { applyData } from '../../store/action/applicant'
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+import { Button } from 'antd';
 
 export default function JobDetail() {
   const newData = []
@@ -67,7 +68,7 @@ export default function JobDetail() {
                 </div>
               </div>
               <div className="jobOverview_button_container">
-                <button onClick={Applied} >Apply</button>
+                <Button loading={loading} onClick={Applied} >Apply</Button>
               </div>
             </div>
           </div>

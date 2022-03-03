@@ -63,7 +63,7 @@ function ParseDetails(props) {
                         return (
                             <tr>
                                 <td>{x.parsedata.NAME}</td>
-                                <td onClick={() => { setOpenPanel(true); setData(x) }} >View Details</td>
+                                <td onClick={() => { setOpenPanel(true); setData(x); console.log("not workingg") }} >View Details</td>
                                 <td>Remove</td>
                                 <td>Send Mail</td>
                             </tr>
@@ -104,7 +104,7 @@ function ParseDetails(props) {
                                 <p>{data.parsedata["COMPANIES WORKED AT"]}</p>
                             </div>
                         </div>}
-                </div> : null}
+                </div> : <div></div>}
             </SidePane>
         </div>
     )

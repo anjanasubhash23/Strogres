@@ -6,10 +6,14 @@ import './JobApplicant.css'
 import FileViewer from 'react-file-viewer';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchcount } from "../../store/action/applicant"
+import { toast } from 'react-toastify';
+import { Button } from 'antd';
 
 export default function JobApplicants(props) {
   const newData = []
   const applicant = useSelector(x => x.app.count)
+  const [loading, setLoading] = useState(false)
+  const [datas, setData] = useState()
   const [openPanel, setOpenPanel] = useState(false)
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
@@ -19,6 +23,40 @@ export default function JobApplicants(props) {
   const dispatch = useDispatch()
   const fetchdata = async () => {
     await dispatch(fetchcount())
+  }
+  console.log(openPanel)
+  const sendMail = async () => {
+    try {
+      setLoading(true)
+      await fetch('/sendMail', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mail: data.parsedata["EMAIL ADDRESS"]
+        })
+      })
+      setLoading(false)
+      toast.success("EMAIL SENT", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+    catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
   }
   useEffect(() => {
     fetchdata()
@@ -45,7 +83,7 @@ export default function JobApplicants(props) {
                 return (
                   <tr>
                     <td>{x.parsedata.NAME}</td>
-                    <td onClick={() => setOpenPanel(true)} >View Details</td>
+                    <td onClick={() => { setOpenPanel(true); setData(x) }} >View Details</td>
                     <td>Remove</td>
                     <td>Send Mail</td>
                   </tr>
@@ -56,9 +94,14 @@ export default function JobApplicants(props) {
             </div>}
           </div>
           <SidePane open={openPanel} width={50} onClose={() => setOpenPanel(false)}>
-            <div>
-              <div style={{ backgroundColor: '#F0ECEC', height: "20vh" }} >
-
+            {datas ? <div style={{ fontFamily: "Montserrat" }} >
+              <div style={{ backgroundColor: '#F0ECEC', display: 'flex', justifyContent: 'space-between', height: "20vh", padding: 20 }} >
+                <div>
+                  <h1>{datas.parsedata.NAME}</h1>
+                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.DESIGNATION}</p>
+                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata["EMAIL ADDRESS"]}</p>
+                </div>
+                <Button loading={loading} onClick={sendMail} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
               </div>
               <div style={{ display: 'flex' }} >
                 <div onClick={() => { setOption(!option) }} style={{ fontFamily: 'Montserrat', textAlign: 'center', width: '50%', color: !option ? '#FFFFFF' : 'black', backgroundColor: !option ? '#FF6A3D' : 'grey', padding: 8 }} >Details</div>
@@ -66,16 +109,23 @@ export default function JobApplicants(props) {
               </div>
               {option ?
                 <FileViewer
-                  filePath='https://firebasestorage.googleapis.com/v0/b/progresskhata-b42cc.appspot.com/o/PK%2Ftask_file%2Ftestsample.pdf?alt=media&token=9a901420-2a23-412a-8af4-bceb150fa416'
+                  filePath={datas.url}
                   fileType='pdf'
                   onError={e => {
                     console.log(e, "error in file-viewer");
                   }}
                 /> :
                 <div style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
-
+                  <div style={{ padding: 20 }} >
+                    <h2>Education</h2>
+                    <p>{datas.parsedata.DEGREE}</p>
+                  </div>
+                  <div style={{ padding: 20 }} >
+                    <h2>Companies Worked At</h2>
+                    <p>{datas.parsedata["COMPANIES WORKED AT"]}</p>
+                  </div>
                 </div>}
-            </div>
+            </div> : null}
           </SidePane>
         </div>
 
