@@ -24,10 +24,10 @@
   border-radius: 0px 0px 0px 0px;
 }
 
-.jobOverview_button_container > button {
+/* .jobOverview_button_container > Button {
   font-size: 18px;
   padding-inline: 20px;
-}
+} */
 
 .jobOverview_description > div > p {
   font-weight: bold;

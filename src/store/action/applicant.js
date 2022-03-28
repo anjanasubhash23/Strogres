@@ -34,6 +34,7 @@ export const parseResume = (url) => {
 export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate) => {
     return async (dispatch, getState) => {
         const url = getState().auth.userData.url
+        console.log(url)
         const uid = getState().auth.userid
         const response = await fetch('/extract', {
             method: 'POST',
@@ -45,7 +46,7 @@ export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate) 
         const resData = await response.json()
         await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${cid}/Applicants.json`, {
             method: "POST",
-            headers: { "content-Type": "application.json" },
+            headers: { "content-Type": "application/json" },
             body: JSON.stringify({
                 resume: url,
                 parseData: resData,

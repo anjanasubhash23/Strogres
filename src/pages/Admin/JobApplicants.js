@@ -83,7 +83,7 @@ export default function JobApplicants(props) {
                 return (
                   <tr>
                     <td>{x.parsedata.NAME}</td>
-                    <td onClick={() => { setOpenPanel(true); setData(x) }} >View Details</td>
+                    <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
                     <td>Remove</td>
                     <td>Send Mail</td>
                   </tr>
@@ -98,8 +98,9 @@ export default function JobApplicants(props) {
               <div style={{ backgroundColor: '#F0ECEC', display: 'flex', justifyContent: 'space-between', height: "20vh", padding: 20 }} >
                 <div>
                   <h1>{datas.parsedata.NAME}</h1>
-                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.DESIGNATION}</p>
-                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata["EMAIL ADDRESS"]}</p>
+                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.DESIGNATION[0]}</p>
+                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.EMAIL}</p>
+                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.MOBILE_NUMBER}</p>
                 </div>
                 <Button loading={loading} onClick={sendMail} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
               </div>
@@ -117,12 +118,12 @@ export default function JobApplicants(props) {
                 /> :
                 <div style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
                   <div style={{ padding: 20 }} >
-                    <h2>Education</h2>
-                    <p>{datas.parsedata.DEGREE}</p>
+                    <h2>QUALIFICATIONS</h2>
+                    <p>{datas.parsedata.EDUCATION}</p>
                   </div>
                   <div style={{ padding: 20 }} >
-                    <h2>Companies Worked At</h2>
-                    <p>{datas.parsedata["COMPANIES WORKED AT"]}</p>
+                    <h2>EXPERIENCES</h2>
+                    <p>{datas.parsedata.EXPERIENCE}</p>
                   </div>
                 </div>}
             </div> : null}

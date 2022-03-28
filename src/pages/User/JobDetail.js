@@ -68,7 +68,7 @@ export default function JobDetail() {
                 </div>
               </div>
               <div className="jobOverview_button_container">
-                <Button loading={loading} onClick={Applied} >Apply</Button>
+                <Button loading={loading} onClick={Applied} style={{ textAlign: 'center' }}  >Apply</Button>
               </div>
             </div>
           </div>

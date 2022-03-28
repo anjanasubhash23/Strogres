@@ -6,9 +6,19 @@ import { FetchAppliedJob } from '../../store/action/applicant'
 
 export default function MyApplication() {
   const data = useSelector(x => x.app.applied)
+  const user = useSelector(x => x.auth.userData)
   const dispatch = useDispatch()
   const fetchdata = async () => {
-    await dispatch(FetchAppliedJob())
+    const response = await fetch('/extract', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        url: user.url
+      })
+    })
+    const resData = await response.json()
+    console.log(resData)
+    // await dispatch(FetchAppliedJob())
   }
   useEffect(() => {
     fetchdata()
