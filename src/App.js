@@ -14,6 +14,7 @@ import ParsedData from './pages/Admin/ParsedData';
 import MyApplication from './pages/User/MyApplication';
 import Explore from './pages/User/Explore';
 import JobDetail from './pages/User/JobDetail';
+import ResumeUploader from './pages/User/ResumeUploader';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/user/dashboard" element={<ProtectedRoutes><MyApplication /></ProtectedRoutes>} />
         <Route path="/user/explore" element={<ProtectedRoutes><Explore /></ProtectedRoutes>} />
         <Route path="/user/explore/viewdetails/:type" element={<ProtectedRoutes><JobDetail /></ProtectedRoutes>} />
+        <Route path="/user/resumeupload" element={<ProtectedRoutes><ResumeUploader /></ProtectedRoutes>} />
       </Routes>
     </BrowserRouter>
   );
