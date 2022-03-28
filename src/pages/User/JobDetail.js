@@ -1,14 +1,16 @@
 import './JobDetail.css'
 import React, { useState } from 'react'
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import TopNavBar from './TopNavBar';
 import { applyData } from '../../store/action/applicant'
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { Button } from 'antd';
+import { Navigate } from "react-router-dom";
 
 export default function JobDetail() {
   const newData = []
+  const[confirmText,setConfirmText] = useState(false)
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
     data.state.info.skills.map(x => { newData.push(x.text); return 0; })
@@ -16,7 +18,23 @@ export default function JobDetail() {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const jobType = data.state.info.mode === 0 ? "Full Time" : "Part Time"
+
+  const navigate = useNavigate();
+  const confirmation = () => {
+    if(window.confirm("Want to use new resume for this application ?")){
+      setConfirmText(true)
+      navigate("/user/resumeupload");
+
+    }else{
+        if(window.confirm("You are about to apply for this job using your previous resume.")){
+          Applied();
+      }
+      setConfirmText(false)
+    }
+  }
+
   const Applied = async () => {
+
     try {
       setLoading(true)
       await dispatch(applyData(data.state.info.cid, data.state.info.jid, data.state.info.jobPost, data.state.info.companyName, jobType, new Date().toLocaleDateString()))
@@ -68,7 +86,7 @@ export default function JobDetail() {
                 </div>
               </div>
               <div className="jobOverview_button_container">
-                <Button loading={loading} onClick={Applied} >Apply</Button>
+                <Button loading={loading} onClick={confirmation} >Apply</Button>
               </div>
             </div>
           </div>
