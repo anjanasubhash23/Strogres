@@ -20,7 +20,8 @@ function ParseDetails(props) {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    mail: data.parsedata["EMAIL ADDRESS"]
+                    mail: data.parsedata["EMAIL ADDRESS"],
+                    name: data.parsedata["NAME"]
                 })
             })
             setLoading(false)
@@ -63,7 +64,8 @@ function ParseDetails(props) {
                         return (
                             <tr>
                                 <td>{x.parsedata.NAME}</td>
-                                <td onClick={() => { setOpenPanel(true); setData(x); console.log("not workingg") }} >View Details</td>
+                                <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
+
                                 <td>Remove</td>
                                 <td>Send Mail</td>
                             </tr>
@@ -77,8 +79,9 @@ function ParseDetails(props) {
                     <div style={{ backgroundColor: '#F0ECEC', display: 'flex', justifyContent: 'space-between', height: "20vh", padding: 20 }} >
                         <div>
                             <h1>{data.parsedata.NAME}</h1>
-                            <p style={{ padding: 0, margin: 0 }} >{data.parsedata.DESIGNATION}</p>
-                            <p style={{ padding: 0, margin: 0 }} >{data.parsedata["EMAIL ADDRESS"]}</p>
+                            {/* <p style={{ padding: 0, margin: 0 }} >{data.parsedata.DESIGNATION}</p> */}
+                            <p style={{ padding: 0, margin: 0 }} >{data.parsedata.EMAIL}</p>
+                            <p style={{ padding: 0, margin: 0 }} >{data.parsedata.MOBILE_NUMBER}</p>
                         </div>
                         <Button loading={loading} onClick={sendMail} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
                     </div>
@@ -94,14 +97,24 @@ function ParseDetails(props) {
                                 console.log(e, "error in file-viewer");
                             }}
                         /> :
-                        <div style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
-                            <div style={{ padding: 20 }} >
+                        <div className='scroll' style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
+                            <div style={{ padding: 10 }} >
                                 <h2>Education</h2>
-                                <p>{data.parsedata.DEGREE}</p>
+                                <p>{data.parsedata.EDUCATION.replaceAll("\n", " \n ")}</p>
                             </div>
-                            <div style={{ padding: 20 }} >
-                                <h2>Companies Worked At</h2>
-                                <p>{data.parsedata["COMPANIES WORKED AT"]}</p>
+                            <div style={{ padding: 10 }} >
+                                <h2>Experience</h2>
+                                <p>{data.parsedata.EXPERIENCE}</p>
+                            </div>
+                            <div style={{ padding: 10 }} >
+                                <h2>Skills</h2>
+                                <ul>
+                                    {data.parsedata.SKILLS.map(x => {
+                                        return (
+                                            <li>{x}</li>
+                                        )
+                                    })}
+                                </ul>
                             </div>
                         </div>}
                 </div> : <div></div>}

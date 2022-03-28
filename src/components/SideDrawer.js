@@ -72,7 +72,7 @@ export default function SideDrawer(props) {
               <Button onClick={() => setVisible(true)} style={{ borderRadius: 8, backgroundColor: '#E7DCDC', alignSelf: 'center' }} >
                 <PlusCircleOutlined style={{ fontSize: 20, alignSelf: 'center', color: '#FF6A3D' }} />
               </Button>
-              <h3 style={{ marginLeft: 20 }} >{data.name}</h3>
+              <h2 style={{ marginLeft: 20, fontFamily: "Montserrat", fontSize: 18 }} >{data.name}</h2>
             </div>
           </div>
         </Header>

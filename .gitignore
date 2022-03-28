@@ -2,8 +2,7 @@
 
 # dependencies
 /node_modules
-/api/final_api/.env
-/api/parser_api/venv
+/api/venv
 /.pnp
 .pnp.js
 
