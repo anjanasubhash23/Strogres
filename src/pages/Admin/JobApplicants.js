@@ -96,8 +96,9 @@ export default function JobApplicants(props) {
           <PopupBox visible={edit} editable={true} data={data.state.info} handleok={handleok} handlecancel={handlecancel} />
           <div style={{ display: 'flex' }} >
             <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
-            {change ? <div style={{ padding: 8 }}>
+            {change ? <div style={{ display: 'flex', padding: 8 }}>
               <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
+              {files ? <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
             </div> : null}
           </div>
           <div className="job-tableContainer">
