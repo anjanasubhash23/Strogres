@@ -5,22 +5,23 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { WithContext as ReactTags } from 'react-tag-input';
 import { toast, ToastContainer } from 'react-toastify';
-import { addJobOpening } from '../store/action/job';
+import { addJobOpening, editJob } from '../store/action/job';
 import "./PopupBox.css"
 
 
 function PopupBox(props) {
-    const [value, setValue] = useState(0)
-    const [city, setCities] = useState(" ")
-    const [type, setType] = useState(0)
-    const [post, setPost] = useState()
-    const [opening, setOpening] = useState()
-    const [description, setDescription] = useState()
-    const [skills, setSkills] = useState([]);
+    const [id, setId] = useState(props.editable ? props.data.id : 0)
+    const [value, setValue] = useState(props.editable ? props.data.mode : 0)
+    const [city, setCities] = useState(props.editable ? props.data.city : " ")
+    const [type, setType] = useState(props.editable ? props.data.type : 0)
+    const [post, setPost] = useState(props.editable ? props.data.jobPost : "")
+    const [opening, setOpening] = useState(props.editable ? props.data.noOpening : 0)
+    const [description, setDescription] = useState(props.editable ? props.data.jobDescription : "")
+    const [skills, setSkills] = useState(props.editable ? props.data.skills : []);
     const [loading, setLoading] = useState(false)
-    const [date, setDate] = useState(new Date().toLocaleDateString())
+    const [date, setDate] = useState(props.editable ? props.data.lastdate : new Date().toLocaleDateString())
     const dispatch = useDispatch()
-
+    console.log(props.editable)
     const KeyCodes = {
         comma: 188,
         enter: 13
@@ -55,31 +56,62 @@ function PopupBox(props) {
     };
 
     const handleOk = async () => {
-        try {
-            setLoading(true)
-            await dispatch(addJobOpening(post, opening, description, skills, value, type, date, city))
-            setLoading(false)
-            toast.success("Job Added Successfully", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            })
-            setDescription(""); setPost(""); setValue(0); setSkills([]); setOpening("")
+        if (props.editable) {
+            try {
+                setLoading(true)
+                await dispatch(editJob(id, post, opening, description, skills, value, type, date, city))
+                setLoading(false)
+                toast.success("Job Edited Successfully", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }
+            catch (err) {
+                setLoading(false)
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }
         }
-        catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            })
+        else {
+            try {
+                setLoading(true)
+                await dispatch(addJobOpening(post, opening, description, skills, value, type, date, city))
+                setLoading(false)
+                toast.success("Job Added Successfully", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+                setDescription(""); setPost(""); setValue(0); setSkills([]); setOpening("")
+            }
+            catch (err) {
+                setLoading(false)
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            }
         }
         props.handleok(false)
     };
@@ -92,13 +124,13 @@ function PopupBox(props) {
             <ToastContainer />
             <Modal title="Add Job Post" centered visible={props.visible} footer={[
                 <Button loading={loading} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={handleOk}>
-                    Add Job
+                    {props.editable ? "Edit Job" : "Add Job"}
                 </Button>]} onCancel={handleCancel} style={{ marginBottom: 30 }} >
                 <div style={{ display: 'flex' }} >
-                    <Input style={{ width: '60%' }} onChange={x => setPost(x.target.value)} placeholder='Job Designation' />
-                    <Input style={{ width: '30%', marginLeft: 20 }} onChange={x => setOpening(x.target.value)} placeholder='No of Opening' />
+                    <Input value={post} style={{ width: '60%' }} onChange={x => setPost(x.target.value)} placeholder='Job Designation' />
+                    <Input value={opening} style={{ width: '30%', marginLeft: 20 }} onChange={x => setOpening(x.target.value)} placeholder='No of Opening' />
                 </div>
-                <TextArea rows={4} placeholder='Job Description' onChange={x => setDescription(x.target.value)} style={{ marginTop: 30 }} />
+                <TextArea value={description} rows={4} placeholder='Job Description' onChange={x => setDescription(x.target.value)} style={{ marginTop: 30 }} />
                 <div style={{ marginTop: 30 }} >
                     <h3>Skills Required</h3>
                     <ReactTags
@@ -129,6 +161,7 @@ function PopupBox(props) {
                 </div>
                 <div style={{ marginTop: 30 }}>
                     <label style={{ marginRight: 20 }} >Last Date to Apply</label>
+                    {props.editable ? <p>Current Last Date: {date}</p> : null}
                     <DatePicker onChange={onChange} />
                 </div>
             </Modal>

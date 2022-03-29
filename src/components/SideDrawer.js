@@ -79,7 +79,7 @@ export default function SideDrawer(props) {
         <Content >
           <div className="site-layout-background">
             {props.children}
-            <PopupBox visible={visible} handleok={handleok} handlecancel={handlecancel} />
+            <PopupBox visible={visible} editable={false} handleok={handleok} handlecancel={handlecancel} />
           </div>
         </Content>
       </Layout>

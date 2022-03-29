@@ -9,6 +9,7 @@ import { fetchcount } from "../../store/action/applicant"
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import PopupBox from '../../components/PopupBox';
 
 export default function JobApplicants(props) {
   const newData = []
@@ -65,6 +66,12 @@ export default function JobApplicants(props) {
   useEffect(() => {
     fetchdata()
   }, [])
+  const handleok = value => {
+    setEdit(value)
+  }
+  const handlecancel = value => {
+    setEdit(value)
+  }
   const appdata = applicant.filter(x => x.jobid === data.state.info.id)
   console.log(appdata, data.state.info, applicant)
   return (
@@ -76,14 +83,17 @@ export default function JobApplicants(props) {
             <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
             <EditOutlined onClick={() => setEdit(!edit)} style={{ textAlign: 'center', marginLeft: 10, marginTop: 8 }} />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }} >
-            <p>Time: {data.state.info.mode === 0 ? "Full Time" : "Part Time"}</p>
-            <p>Mode: {data.state.info.type === 0 ? "WFH" : "On-Site"}</p>
-            {data.state.info.type === 1 ? <p>Location: {data.state.info.city}</p> : null}
-            <p>Last Date to Apply: {data.state.info.lastdate}</p>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+              <p>Time: {data.state.info.mode === 0 ? "Full Time" : "Part Time"}</p>
+              <p>Mode: {data.state.info.type === 0 ? "WFH" : "On-Site"}</p>
+              {data.state.info.type === 1 ? <p>Location: {data.state.info.city}</p> : null}
+              <p>Last Date to Apply: {data.state.info.lastdate}</p>
+            </div>
+            <p>Job Description: {data.state.info.jobDescription}</p>
+            <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
           </div>
-          <p>Job Description: {data.state.info.jobDescription}</p>
-          <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
+          <PopupBox visible={edit} editable={true} data={data.state.info} handleok={handleok} handlecancel={handlecancel} />
           <div style={{ display: 'flex' }} >
             <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
             {change ? <div style={{ padding: 8 }}>
