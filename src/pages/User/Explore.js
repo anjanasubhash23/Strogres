@@ -66,11 +66,9 @@ export default function Explore() {
                 </div>
                 <div className="jobOverview_button_container">
                   <button onClick={() => { setData(x); setFlag(1) }} >
-
                     View Details
-
                   </button>
-                  <button>Apply</button>
+      
                 </div>
               </div>
             </div>
