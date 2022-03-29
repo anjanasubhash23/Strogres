@@ -90,7 +90,7 @@ function PopupBox(props) {
     return (
         <div>
             <ToastContainer />
-            <Modal title="Add Job Post" visible={props.visible} footer={[
+            <Modal title="Add Job Post" centered visible={props.visible} footer={[
                 <Button loading={loading} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={handleOk}>
                     Add Job
                 </Button>]} onCancel={handleCancel} style={{ marginBottom: 30 }} >

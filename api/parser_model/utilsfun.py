@@ -27,7 +27,7 @@ def extractText(url):
 
 
 def extract_enitity_model(text):
-    nlp = spacy.load('test')
+    nlp = spacy.load('demo_rescue')
     doc = nlp(text)
     entities = {}
     for ent in doc.ents:

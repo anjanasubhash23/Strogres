@@ -8,11 +8,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchcount } from "../../store/action/applicant"
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
 export default function JobApplicants(props) {
   const newData = []
   const applicant = useSelector(x => x.app.count)
   const [loading, setLoading] = useState(false)
+  const [files, setFiles] = useState()
+  const [edit, setEdit] = useState(false)
+  const [change, setChange] = useState(false)
   const [datas, setData] = useState()
   const [openPanel, setOpenPanel] = useState(false)
   const data = useLocation()
@@ -68,7 +72,10 @@ export default function JobApplicants(props) {
       <div className="JobApplicants" style={{ fontFamily: 'Montserrat' }} >
         <div className="job-subContainer">
 
-          <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
+          <div style={{ display: "flex" }} >
+            <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
+            <EditOutlined onClick={() => setEdit(!edit)} style={{ textAlign: 'center', marginLeft: 10, marginTop: 8 }} />
+          </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }} >
             <p>Time: {data.state.info.mode === 0 ? "Full Time" : "Part Time"}</p>
             <p>Mode: {data.state.info.type === 0 ? "WFH" : "On-Site"}</p>
@@ -77,6 +84,12 @@ export default function JobApplicants(props) {
           </div>
           <p>Job Description: {data.state.info.jobDescription}</p>
           <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
+          <div style={{ display: 'flex' }} >
+            <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
+            {change ? <div style={{ padding: 8 }}>
+              <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
+            </div> : null}
+          </div>
           <div className="job-tableContainer">
             {appdata ? <table className='job-table'>
               {appdata.map(x => {
@@ -98,7 +111,6 @@ export default function JobApplicants(props) {
               <div style={{ backgroundColor: '#F0ECEC', display: 'flex', justifyContent: 'space-between', height: "20vh", padding: 20 }} >
                 <div>
                   <h1>{datas.parsedata.NAME}</h1>
-                  <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.DESIGNATION[0]}</p>
                   <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.EMAIL}</p>
                   <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.MOBILE_NUMBER}</p>
                 </div>
@@ -117,13 +129,35 @@ export default function JobApplicants(props) {
                   }}
                 /> :
                 <div style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
-                  <div style={{ padding: 20 }} >
-                    <h2>QUALIFICATIONS</h2>
-                    <p>{datas.parsedata.EDUCATION}</p>
+                  <div style={{ padding: 10 }} >
+                    <h2>Education</h2>
+                    <ul>
+                      {data.parsedata.EDUCATION.map(x => {
+                        return (
+                          <li>{x}</li>
+                        )
+                      })}
+                    </ul>
                   </div>
-                  <div style={{ padding: 20 }} >
-                    <h2>EXPERIENCES</h2>
-                    <p>{datas.parsedata.EXPERIENCE}</p>
+                  <div style={{ padding: 10 }} >
+                    <h2>Experience</h2>
+                    <ul>
+                      {data.parsedata.EXPERIENCE.map(x => {
+                        return (
+                          <li>{x}</li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                  <div style={{ padding: 10 }} >
+                    <h2>Skills</h2>
+                    <ul>
+                      {data.parsedata.SKILLS.map(x => {
+                        return (
+                          <li>{x}</li>
+                        )
+                      })}
+                    </ul>
                   </div>
                 </div>}
             </div> : null}

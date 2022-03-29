@@ -100,11 +100,23 @@ function ParseDetails(props) {
                         <div className='scroll' style={{ backgroundColor: '#F8F3EF', height: '70vh' }} >
                             <div style={{ padding: 10 }} >
                                 <h2>Education</h2>
-                                <p>{data.parsedata.EDUCATION.replaceAll("\n", " \n ")}</p>
+                                <ul>
+                                    {data.parsedata.EDUCATION.map(x => {
+                                        return (
+                                            <li>{x}</li>
+                                        )
+                                    })}
+                                </ul>
                             </div>
                             <div style={{ padding: 10 }} >
                                 <h2>Experience</h2>
-                                <p>{data.parsedata.EXPERIENCE}</p>
+                                <ul>
+                                    {data.parsedata.EXPERIENCE.map(x => {
+                                        return (
+                                            <li>{x}</li>
+                                        )
+                                    })}
+                                </ul>
                             </div>
                             <div style={{ padding: 10 }} >
                                 <h2>Skills</h2>

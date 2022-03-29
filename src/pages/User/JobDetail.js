@@ -5,33 +5,22 @@ import TopNavBar from './TopNavBar';
 import { applyData } from '../../store/action/applicant'
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { Navigate } from "react-router-dom";
+import { WarningOutlined } from '@ant-design/icons';
 
 export default function JobDetail() {
   const newData = []
-  const[confirmText,setConfirmText] = useState(false)
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
     data.state.info.skills.map(x => { newData.push(x.text); return 0; })
   }
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false)
   const jobType = data.state.info.mode === 0 ? "Full Time" : "Part Time"
 
   const navigate = useNavigate();
-  const confirmation = () => {
-    if(window.confirm("Want to use new resume for this application ?")){
-      setConfirmText(true)
-      navigate("/user/resumeupload");
-
-    }else{
-        if(window.confirm("You are about to apply for this job using your previous resume.")){
-          Applied();
-      }
-      setConfirmText(false)
-    }
-  }
 
   const Applied = async () => {
 
@@ -66,6 +55,30 @@ export default function JobDetail() {
     <TopNavBar>
       <div className="JobDetails">
         <ToastContainer />
+        <Modal
+          visible={visible}
+          onCancel={() => setVisible(false)}
+          footer={[
+            <Button style={{ color: '#f7f8f9', backgroundColor: "#f8643c" }} onClick={() => navigate("/user/resumeupload")}  >
+              Change Resume
+            </Button>,
+            <Button style={{ color: '#f7f8f9', backgroundColor: "#f8643c" }} onClick={Applied} >
+              Continue with the same
+            </Button>
+          ]}
+          title={
+            <div style={{ display: "flex" }}>
+              <WarningOutlined style={{ fontSize: 25, color: "#2662ff" }} />
+              <h3 style={{ marginLeft: 20 }}>Alert Info</h3>
+            </div>
+          }
+        >
+          <>
+            <p>
+              You are about to apply for this job using your previous resume.Would you like to change the resume or continue with the same
+            </p>
+          </>
+        </Modal>
         <header>
           <div className="Explore-jobOverview">
             <div className="jobOverview_header">
@@ -86,7 +99,7 @@ export default function JobDetail() {
                 </div>
               </div>
               <div className="jobOverview_button_container">
-                <Button loading={loading} onClick={confirmation} >Apply</Button>
+                <Button loading={loading} onClick={() => setVisible(true)} >Apply</Button>
               </div>
             </div>
           </div>
