@@ -89,8 +89,6 @@ function ParseDetails(props) {
                             <tr>
                                 <td>{x.parsedata.NAME}</td>
                                 <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
-
-                                <td>Remove</td>
                                 <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME) }}  ><td  >Send Mail</td></a></div>
                             </tr>
                         )

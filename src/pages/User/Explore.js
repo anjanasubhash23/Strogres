@@ -44,7 +44,7 @@ export default function Explore() {
             <FilterOutlined className="Explore-icon" />
           </div>
         </header>
-        {jobdata.map(x => {
+        {jobdata.filter(x => new Date(x.lastdate).toLocaleDateString() > new Date().toLocaleDateString()).map(x => {
           return (
             <div className="Explore-jobOverview">
               <div className="jobOverview_header">
@@ -68,7 +68,7 @@ export default function Explore() {
                   <button onClick={() => { setData(x); setFlag(1) }} >
                     View Details
                   </button>
-      
+
                 </div>
               </div>
             </div>
