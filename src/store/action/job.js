@@ -110,4 +110,50 @@ export const displayJob = () => {
     }
 }
 
+export const editJob = (id, jobPost, noOpening, jobDescription, skills, mode, type, lastdate, city) => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.userid
+        const data = getState().auth.userData
+        await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/jobs/${id}.json`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jobPost: jobPost,
+                noOpening: noOpening,
+                jobDescription: jobDescription,
+                skills: skills,
+                mode: mode,
+                type: type,
+                lastdate: lastdate,
+                city: city
+            })
+        })
+        const response = await fetch('https://resume-parser-bf8d9-default-rtdb.firebaseio.com/JobPost.json')
+        const resData = await response.json()
+        let kid;
+        for (const key in resData) {
+            if (resData[key].jobId === id) {
+                kid = key
+            }
+        }
+        await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/JobPost/${kid}.json`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jobId: resData.name,
+                companyName: data.name,
+                companyId: uid,
+                jobPost: jobPost,
+                noOpening: noOpening,
+                jobDescription: jobDescription,
+                skills: skills,
+                mode: mode,
+                type: type,
+                lastdate: lastdate,
+                city: city
+            })
+        })
+
+    }
+}
 
