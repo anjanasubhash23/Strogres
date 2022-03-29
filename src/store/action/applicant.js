@@ -58,7 +58,9 @@ export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate) 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 jobName,
+                jid,
                 companyName,
+                cid,
                 jobType,
                 appliedDate,
                 url: url
@@ -85,7 +87,7 @@ export const FetchAppliedJob = () => {
         const resData = await response.json()
         const data = []
         for (const key in resData) {
-            data.push({ id: key, jobname: resData[key].jobName, companyname: resData[key].companyName, jobtype: resData[key].jobType, applieddate: resData[key].appliedDate, url: resData[key].url })
+            data.push({ id: key, jobname: resData[key].jobName, companyname: resData[key].companyName, jobtype: resData[key].jobType, applieddate: resData[key].appliedDate, url: resData[key].url, cid: resData[key].cid, jid:resData[key].jid })
         }
         dispatch({ type: "FETCH_APPLIED_DATA", data: data })
     }

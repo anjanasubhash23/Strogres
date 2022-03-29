@@ -9,17 +9,18 @@ export default function MyApplication() {
   const user = useSelector(x => x.auth.userData)
   const dispatch = useDispatch()
   const fetchdata = async () => {
-    const response = await fetch('/extract', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        url: user.url
-      })
-    })
-    const resData = await response.json()
-    console.log(resData)
-    // await dispatch(FetchAppliedJob())
+    // const response = await fetch('/extract', {
+    //   method: 'POST',
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     url: user.url
+    //   })
+    // })
+    // const resData = await response.json()
+    // console.log(resData)
+    await dispatch(FetchAppliedJob())
   }
+  console.log(data)
   useEffect(() => {
     fetchdata()
   }, [])
@@ -38,6 +39,7 @@ export default function MyApplication() {
               <th>Job Type</th>
               <th>Applied Date</th>
               <th>View Application</th>
+              <th>Status</th>
             </tr>
             {data.map(x => {
               return (
@@ -47,6 +49,7 @@ export default function MyApplication() {
                   <td>{x.jobtype}</td>
                   <td>{x.applieddate}</td>
                   <td><a href={x.url} target="_blank" >Link</a></td>
+                  <td>Pending</td>
                 </tr>
               )
             })}
