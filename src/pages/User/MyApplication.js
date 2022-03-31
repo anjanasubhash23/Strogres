@@ -19,6 +19,7 @@ export default function MyApplication() {
     // const resData = await response.json()
     // console.log(resData)
     await dispatch(FetchAppliedJob())
+
   }
   console.log(data)
   useEffect(() => {
@@ -42,6 +43,10 @@ export default function MyApplication() {
               <th>Status</th>
             </tr>
             {data.map(x => {
+              var someDate = new Date(x.applieddate);
+              var numberOfDaysToAdd = 10;
+              var result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
+              var bool = new Date(result).toLocaleDateString() === new Date().toLocaleDateString() ? true : false
               return (
                 <tr>
                   <td>{x.companyname}</td>
@@ -49,7 +54,7 @@ export default function MyApplication() {
                   <td>{x.jobtype}</td>
                   <td>{x.applieddate}</td>
                   <td><a href={x.url} target="_blank" >Link</a></td>
-                  <td>Pending</td>
+                  <td style={{ color: bool ? '#2662ff' : x.status === "Hold" ? '#ffcc00' : x.status === "Rejected" ? 'red' : 'lightgreen' }} >{!bool ? x.status : "No Response\n Looks like your resume haven't be best for this role. You can change your resume and apply again"}</td>
                 </tr>
               )
             })}

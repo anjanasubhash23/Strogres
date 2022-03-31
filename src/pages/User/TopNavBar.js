@@ -6,7 +6,7 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
-import { useLocation, useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from 'react-redux';
 import { LogOut } from '../../store/action/auth';
 
@@ -21,10 +21,12 @@ export default function TopNavBar(props) {
     await dispatch(LogOut())
     navigate('/')
   }
+  console.log(data)
   const menu = (
     <Menu>
       <Menu.Item>
-        <a href="/admin/job">Edit Profile</a>
+        <p onClick={() => navigate("/user/editinfo", { state: data })} >Edit Profile</p>
+        {/* <Navigate to={"/user/editinfo"} state={{ info: data }} >Edit Profile</Navigate> */}
       </Menu.Item>
       <Menu.Item onClick={logout} >
         Log Out

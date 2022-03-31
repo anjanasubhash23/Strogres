@@ -26,6 +26,7 @@ function DashBoard() {
         fetch()
     }, [])
     const appdata = count.filter(x => x.jobid !== undefined)
+    const hired = count.filter(x => x.status === "Selected")
     return (
         <SideDrawer>
             <div className="DashBoard">
@@ -58,7 +59,7 @@ function DashBoard() {
 
                             <div className="container-description">
                                 <h1>No of People Hired</h1>
-                                <p>0</p>
+                                <p>{hired.length}</p>
                             </div>
                         </div>
 
