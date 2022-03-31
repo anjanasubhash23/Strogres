@@ -144,12 +144,15 @@ export const AdminData = () => {
 export const ApplicantData = () => {
     return async (dispatch, getState) => {
         const uid = getState().auth.userid
+        console.log("starting")
         const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicant/${uid}/info.json`)
         const resData = await response.json()
+        console.log(resData)
         const data = []
         for (const key in resData) {
             data.push(new Applicant(key, resData[key].firstname, resData[key].lastname, resData[key].city, resData[key].job, resData[key].email, resData[key].url))
         }
+        console.log(data)
         dispatch({
             type: "FETCH_APPLICANT",
             data: data

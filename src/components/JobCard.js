@@ -14,31 +14,31 @@ function JobCard(props) {
   const [flag, setFlag] = useState(0);
   const [id, setId] = useState()
   const [visible, setVisible] = useState(false)
-  const[open,setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
   // const [modal, contextHolder] = Modal.useModal();
   const dispatch = useDispatch()
 
   useEffect(() => {
     checkJobOpen()
-    
-  },[])
+
+  }, [])
 
   const checkJobOpen = () => {
     var givendDate = new Date(props.data.lastdate);
-    console.log('given Date => ',givendDate)
-    
-    
+    console.log('given Date => ', givendDate)
+
+
     var currentDate = new Date();
     console.log("current Date =>", currentDate);
-    if(givendDate < currentDate){
+    if (givendDate < currentDate) {
       console.log("job closed :(")
       setOpen(false)
-      
-      
+
+
     }
     else {
       setOpen(true)
-      
+
     }
   }
 
@@ -57,7 +57,7 @@ function JobCard(props) {
   function onChange(e) {
     setId(props.data.id);
     setOpen(value => !value)
-    console.log(open, 'for' , id)
+    console.log(open, 'for', id)
     console.log("last date => ", props.data.lastdate);
   }
   // const config = {
@@ -130,7 +130,7 @@ function JobCard(props) {
             />
           </div>
           <WorkIcon style={{ fontSize: 32, margin: 5, color: open ? "#0f2030" : "white" }} />
-          <h2 style={{ color: open ? "#0f2030" : "white", fontWeight: "600" }}>
+          <h2 style={{ color: open ? "#0f2030" : "white", fontWeight: "600", fontSize: 18 }}>
             {props.data.jobPost}
           </h2>
         </div>

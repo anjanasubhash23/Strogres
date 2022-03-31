@@ -13,7 +13,7 @@ import { FetchAppliedJob } from "../../store/action/applicant";
 export default function JobDetail() {
   const appliedData = useSelector((x) => x.app.applied);
   const user = useSelector((x) => x.auth.userData);
-  const[isApplied,setIsApplied] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
   const fetchdata = async () => {
     await dispatch(FetchAppliedJob());
   };
@@ -23,10 +23,21 @@ export default function JobDetail() {
   }, []);
 
   const checkIfApplied = () => {
-    if(data.state.info.jid === appliedData[0].jid){
+    var ndata;
+    appliedData.lenth !== 0 ? ndata = appliedData.filter(x => x.jid === data.state.info.jid) : ndata = null
+    console.log(ndata)
+    if (ndata.length !== 0) {
+      var someDate = new Date(ndata[0].applieddate);
+      var numberOfDaysToAdd = 10;
+      var result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
+      var bool = new Date(result).toLocaleDateString() === new Date().toLocaleDateString() ? true : false
+      var bool1 = ndata.some(x => x.status === "Rejected")
+    }
+    console.log(appliedData.some(x => x.jid === data.state.info.jid))
+    if (appliedData.some(x => x.jid === data.state.info.jid) && !bool && !bool1) {
       setIsApplied(true)
     }
-    else{
+    else {
       setIsApplied(false)
     }
     // console.log("User applied on => ",appliedData[0].jid)
@@ -52,6 +63,7 @@ export default function JobDetail() {
 
   const Applied = async () => {
     try {
+      setVisible(false)
       setLoading(true);
       await dispatch(
         applyData(
@@ -60,7 +72,8 @@ export default function JobDetail() {
           data.state.info.jobPost,
           data.state.info.companyName,
           jobType,
-          new Date().toLocaleDateString()
+          new Date().toLocaleDateString(),
+          false
         )
       );
       setLoading(false);
@@ -96,7 +109,15 @@ export default function JobDetail() {
           footer={[
             <Button
               style={{ color: "#f7f8f9", backgroundColor: "#f8643c" }}
-              onClick={() => navigate("/user/resumeupload")}
+              onClick={() => navigate("/user/resumeupload", {
+                state: {
+                  cid: data.state.info.cid,
+                  jid: data.state.info.jid,
+                  post: data.state.info.jobPost,
+                  cname: data.state.info.companyName,
+                  type: jobType
+                }
+              })}
             >
               Change Resume
             </Button>,
@@ -149,8 +170,8 @@ export default function JobDetail() {
                 </div>
               </div>
               <div className="jobOverview_button_container">
-                <Button disabled = {isApplied? true : false} loading={loading} onClick={() => setVisible(true)}>
-                  {isApplied? 'Already Applied' : 'Apply'}
+                <Button disabled={isApplied ? true : false} loading={loading} onClick={() => setVisible(true)}>
+                  {isApplied ? 'Already Applied' : 'Apply'}
                 </Button>
               </div>
             </div>

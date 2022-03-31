@@ -60,7 +60,7 @@ export default function SideDrawer(props) {
         <Menu theme="dark" mode="inline" style={{ fontSize: 16 }} >
           <Menu.Item icon={<PieChartOutlined style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} />}><Link to='/admin/dashboard' style={{ color: location.pathname === '/admin/dashboard' ? "white" : 'grey' }} >DashBoard</Link></Menu.Item>
           <Menu.Item icon={<FileDoneOutlined style={{ color: location.pathname === `/admin/job/${type}` || location.pathname === `/admin/job` ? "white" : 'grey' }} />}><Link to='/admin/job' style={{ color: location.pathname === `/admin/job/${type}` || location.pathname === `/admin/job` ? "white" : 'grey' }} >Job</Link></Menu.Item>
-          <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item>
+          {/* <Menu.Item icon={<PrinterOutlined style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} />}  ><Link to='/admin/parse' style={{ color: location.pathname === '/admin/parse' ? "white" : 'grey' }} >Parse Resume</Link></Menu.Item> */}
           <Menu.Item icon={<BookOutlined style={{ color: location.pathname === '/admin/parsedata' ? "white" : 'grey' }} />}  ><Link to='/admin/parsedata' style={{ color: location.pathname === '/admin/parsedata' ? "white" : 'grey' }} >Parsed Data</Link></Menu.Item>
           <Menu.Item onClick={logout} icon={<LogoutOutlined />}>LogOut</Menu.Item>
         </Menu>

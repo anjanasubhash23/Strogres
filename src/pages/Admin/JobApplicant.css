@@ -1,72 +1,80 @@
-  :root {
-    --clr-primary-300:#F3EED9;
-    --clr-primary-400:#f8643c;
-    --clr-primary-500:#ff3700;
-    --clr-primary-600:#db3000;
-  }
+:root {
+    --clr-primary-300: #F3EED9;
+    --clr-primary-400: #f8643c;
+    --clr-primary-500: #ff3700;
+    --clr-primary-600: #db3000;
+}
 
 
-  ::before
-  ::after{
-      box-sizing: border-box;
-  }
-  .JobApplicants{
-      font-weight: 300;
-      line-height: 1.3;
-      font-size: 1.1rem;
-      padding: 3rem;
-      height: 90vh;
-      
-  }
+::before ::after {
+    box-sizing: border-box;
+}
 
-  .job-subContainer > p {
-      font-weight: 400;
-  }
+.JobApplicants {
+    font-weight: 300;
+    line-height: 1.3;
+    font-size: 1.1rem;
+    padding: 3rem;
+    height: 90vh;
 
-  .job-table{
-      width: 100%;
-      border-collapse: collapse;
-  }
+}
 
-  .job-tableContainer{
-      padding-top: 2rem;
-  }
+.blureffect {
+    filter: blur(50px);
+}
 
-  .job-table > tr > td {
-      padding: 8px;
-      border: 1px solid #ddd;
-      padding: 20px;
-      font-size: large;
-  }
+.job-subContainer>p {
+    font-weight: 400;
+}
 
-  .job-table > tr > th {
+.job-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.job-tableContainer {
+    padding-top: 2rem;
+}
+
+.job-table>tr>td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    font-size: large;
+}
+
+.job-table>tr>th {
     padding: 20px;
     border: 1px solid #ddd;
     text-align: left;
     background-color: var(--clr-primary-400);
     color: white;
-  }
+}
 
 
-  .job-table > tr > td:first-child { font-weight: 400; }
-  
-     .job-table > tr > td:nth-child(2):hover { 
-      background-color: var(--clr-primary-500);
-      color: white;
-      opacity: 0.6;
-      transition: 0.3s; }
+.job-table>tr>td:first-child {
+    font-weight: 400;
+}
 
-  .job-table > tr > td:nth-child(3):hover { 
-      background-color: red;
-      color: white;
-      opacity: 0.6;
-      transition: 0.3s; }
+.job-table>tr>td:nth-child(2):hover {
+    background-color: var(--clr-primary-500);
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.job-table>tr>td:nth-child(3):hover {
+    background-color: red;
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}
 
 
-    
-     .job-table > tr > td:nth-child(4):hover { 
-      background-color: blue;  
-      color: white;
-      opacity: 0.6;
-      transition: 0.3s; }
-   
+
+.job-table>tr>td:nth-child(4):hover {
+    background-color: blue;
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}

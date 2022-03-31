@@ -15,6 +15,7 @@ import MyApplication from './pages/User/MyApplication';
 import Explore from './pages/User/Explore';
 import JobDetail from './pages/User/JobDetail';
 import ResumeUploader from './pages/User/ResumeUploader';
+import Editprofile from './pages/User/Editprofile';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path='/admin/parsedata' element={<ProtectedRoutes><ParsedData /> </ProtectedRoutes>} />
         <Route path="/user/dashboard" element={<ProtectedRoutes><MyApplication /></ProtectedRoutes>} />
         <Route path="/user/explore" element={<ProtectedRoutes><Explore /></ProtectedRoutes>} />
+        <Route path="/user/editinfo" element={<ProtectedRoutes><Editprofile /></ProtectedRoutes>} />
         <Route path="/user/explore/viewdetails/:type" element={<ProtectedRoutes><JobDetail /></ProtectedRoutes>} />
         <Route path="/user/resumeupload" element={<ProtectedRoutes><ResumeUploader /></ProtectedRoutes>} />
       </Routes>
