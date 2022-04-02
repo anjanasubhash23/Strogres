@@ -60,8 +60,10 @@ export default function JobApplicants(props) {
 
   }
 
+
   console.log(openPanel)
   const sendMail = async () => {
+    console.log('sending mail')
     try {
       await fetch('/sendMail', {
         method: "POST",
@@ -108,7 +110,8 @@ export default function JobApplicants(props) {
   }
   const update = async (id, mode, appuid, appliedid) => {
     setLoad(true)
-    await dispatch(updateStatus(id, false, mode, appuid, appliedid))
+    console.log("Updating..")
+     await dispatch(updateStatus(id, false, mode, appuid, appliedid))
     setLoad(false)
   }
   const appdata = applicant.filter(x => x.jobid === data.state.info.id)
@@ -130,7 +133,7 @@ export default function JobApplicants(props) {
         </div>
       </Modal>
       <div className="JobApplicants scroll" style={{ fontFamily: 'Montserrat' }} >
-        <div className="job-subContainer">
+        <div className="app-subContainer">
 
           <div style={{ display: "flex" }} >
             <h1 style={{ fontSize: 25 }} >{data.state.info.jobPost}</h1>
@@ -154,38 +157,46 @@ export default function JobApplicants(props) {
               {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
             </div> : null}
           </div>
-          <div className="job-tableContainer">
-            {appdata ? <table className='job-table'>
+
+          <div className='app-tableContainer'>
+            <h1>Applicants</h1>
+            {appdata ? <table className='app-table'>
+            <tr>
+              <th>Name</th>
+              <th>Decision</th>
+              <th>Status</th>
+            </tr>
               {appdata.map(x => {
                 return (
                   <tr>
-                    <td>{x.parsedata.NAME}</td>
-                    <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
-                    <div className={lod ? "blureffect" : ""} style={{ padding: 20, border: "1px solid #ddd" }}>{!x.estatus ? "Mail Not Sent" : x.status === "" ? <div style={{ display: 'flex', padding: 0, margin: 0, justifyContent: 'center' }} >
-                      <td>
-                        <p>Status: </p>
-                        <Button onClick={() => update(x.id, "Selected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
-                        <Button onClick={() => update(x.id, "Hold", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'yellow' }} ><MinusCircleOutlined /></Button>
-                        <Button onClick={() => update(x.id, "Rejected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
+                    <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.parsedata.NAME}</td>
+                    <td>{!x.estatus? <Button disabled={load} className='app-button-email' onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}>Send Email</Button>
+                    :
+                    <div className='app-button-container'>
+                      <Button disabled={load}  className='app-button-accept' onClick={() => update(x.id, "Selected", x.appuid, x.appliedid)}  >Accept</Button>
+                        <Button disabled={load} className='app-button-hold' onClick={() => update(x.id, "Hold", x.appuid, x.appliedid)}>Interview</Button>
+                        <Button disabled={load} className='app-button-reject' onClick={() => update(x.id, "Rejected", x.appuid, x.appliedid)} >Reject</Button>
+                      </div>}
                       </td>
-                    </div> : x.status === "Hold" ? <div style={{ justifyContent: 'center' }} >
-                      <p>Status:Hold</p>
-                      <div style={{ display: 'flex', justifyContent: 'center' }} >
-                        <td>
-                          <p>Update Status:   </p>
-                          <Button onClick={() => update(x.id, "Selected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
-                          <Button onClick={() => update(x.id, "Rejected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
-                        </td>
-                      </div>
-                    </div> : x.status}</div>
-                    <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}  ><td  >Send Mail</td></a></div>
+                      <td>
+                        {x.status === "Hold"?<span className="dot" style={{backgroundColor:'#0677d4'}}></span>
+                        :
+                        x.status === "Selected"? <span className="dot" style={{backgroundColor:'#00cc30'}}></span>
+                        :
+                        x.status === "Rejected"?<span className="dot" style={{backgroundColor:'#ff4f4f'}}></span>
+                        :
+                         <span className="dot" style={{backgroundColor:'#bbb'}}></span>}
+                      </td>
                   </tr>
-                )
+                );
               })}
             </table> : <div style={{ postion: 'absolute', top: '50%', left: '50%' }} >
               <h2>No Application Received Yet</h2>
             </div>}
           </div>
+
+
+
           <SidePane open={openPanel} width={50} onClose={() => setOpenPanel(false)}>
             {datas ? <div style={{ fontFamily: "Montserrat" }} >
               <div style={{ backgroundColor: '#F0ECEC', display: 'flex', justifyContent: 'space-between', height: "20vh", padding: 20 }} >

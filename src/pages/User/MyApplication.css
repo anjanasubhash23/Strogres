@@ -40,3 +40,70 @@
     background-color: white;
     padding-right: 5%;
 }
+
+.job-table > tr>td:nth-child(1),
+.job-table > tr>td:nth-child(2),
+.job-table > tr>td:nth-child(3),
+.job-table > tr>td:nth-child(4){
+  pointer-events: none; 
+}
+
+.blureffect {
+    filter: blur(50px);
+}
+
+.job-subContainer>p {
+    font-weight: 400;
+}
+
+.job-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.job-tableContainer {
+    padding-top: 2rem;
+}
+
+.job-table>tr>td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    font-size: large;
+}
+
+.job-table>tr>th {
+    padding: 20px;
+    border: 1px solid #ddd;
+    text-align: left;
+    background-color: var(--clr-primary-400);
+    color: white;
+}
+
+
+.job-table>tr>td:first-child {
+    font-weight: 400;
+}
+
+.job-table>tr>td:nth-child(2):hover {
+    background-color: var(--clr-primary-500);
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.job-table>tr>td:nth-child(3):hover {
+    background-color: red;
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+
+
+.job-table>tr>td:nth-child(4):hover {
+    background-color: blue;
+    color: white;
+    opacity: 0.6;
+    transition: 0.3s;
+}
