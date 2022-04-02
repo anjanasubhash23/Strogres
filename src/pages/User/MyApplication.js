@@ -54,7 +54,7 @@ export default function MyApplication() {
                   <td>{x.jobtype}</td>
                   <td>{x.applieddate}</td>
                   <td><a href={x.url} target="_blank" >Link</a></td>
-                  <td style={{ color: bool ? '#2662ff' : x.status === "Hold" ? '#ffcc00' : x.status === "Rejected" ? 'red' : 'lightgreen' }} >{!bool ? x.status : "No Response\n Looks like your resume haven't be best for this role. You can change your resume and apply again"}</td>
+                  <td style={{ color: bool ? '#2662ff' : x.status === "Hold" ? '#ffcc00' : x.status === "Rejected" ? 'red' : 'green' }} >{!bool ? x.status : "No Response\n Looks like your resume haven't be best for this role. You can change your resume and apply again"}</td>
                 </tr>
               )
             })}
