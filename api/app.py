@@ -6,6 +6,7 @@ import spacy
 import re
 from parser_model import finalModel
 import pandas as pd
+from parser_model import utilsfun
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 app = Flask(__name__)
@@ -38,6 +39,16 @@ def rankData():
     answer = answer.iloc[[1], [0]].values[0]
     answer = round(float(answer), 4)*10
     return answer
+
+
+@app.route("/extractExp", methods=["POST", "GET"])
+def extractexp():
+    body = request.get_json()
+    years = utilsfun.get_total_experience(body.get("data"))
+    data = {
+        "year": years
+    }
+    return data
 
 
 if __name__ == "__main__":

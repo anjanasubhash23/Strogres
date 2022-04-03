@@ -6,13 +6,14 @@ import { ApplicantData } from '../../store/action/auth'
 import TopNavBar from './TopNavBar'
 import app from '../../firebase'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, deleteObject } from 'firebase/storage'
-import { updateInfo } from '../../store/action/applicant'
+import { FetchAppliedJob, updateInfo } from '../../store/action/applicant'
 import { toast, ToastContainer } from 'react-toastify'
 
 function Editprofile() {
     const data = useLocation()
     const userdata = data.state
     console.log(data, userdata)
+    const applieddata = useSelector(x => x.app.count)
     const [firstName, setfirstName] = useState(userdata.name)
     const [email, setEmail] = useState(userdata.email)
     const [lastName, setlastName] = useState(userdata.lastname)
@@ -31,13 +32,25 @@ function Editprofile() {
         setJob([job1, job2])
         setCity([city1, city2])
         if (file) {
-            const ref1 = ref(storageRef, `/Resume/${userdata.name}`);
-            deleteObject(ref1)
-            const reff = ref(storageRef, `/Resume/${userdata.name}`);
-            await uploadBytesResumable(reff, file[0])
-            const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}`))
-            console.log(url)
-            await dispatch(updateInfo(userdata.id, firstName, lastName, url, email, city, job))
+            console.log(applieddata.some(x => x.url === userdata.url))
+            if (applieddata.some(x => x.url === userdata.url)) {
+                const date = Math.random() * 100
+                const reff = ref(storageRef, `/Resume/${userdata.name}_Editted_${date}`);
+                await uploadBytesResumable(reff, file[0])
+                const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}_Editted_${new Date().toLocaleString()}`))
+                console.log(url)
+                await dispatch(updateInfo(userdata.id, firstName, lastName, url, email, city, job))
+            }
+            else {
+                const ref1 = ref(storageRef, `/Resume/${userdata.name}`);
+                deleteObject(ref1)
+                const reff = ref(storageRef, `/Resume/${userdata.name}`);
+                await uploadBytesResumable(reff, file[0])
+                const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}`))
+                console.log(url)
+                await dispatch(updateInfo(userdata.id, firstName, lastName, url, email, city, job))
+
+            }
         }
         else {
             await dispatch(updateInfo(userdata.id, firstName, lastName, userdata.url, email, city, job))
@@ -53,12 +66,12 @@ function Editprofile() {
             progress: undefined,
         });
     }
-    // useEffect(() => {
-    //     const fetchdata = async () => {
-    //         await dispatch(ApplicantData())
-    //     }
-    //     fetchdata()
-    // }, [])
+    useEffect(() => {
+        const fetchdata = async () => {
+            await dispatch(FetchAppliedJob())
+        }
+        fetchdata()
+    }, [])
     return (
         <TopNavBar>
             <ToastContainer />

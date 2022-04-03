@@ -40,7 +40,7 @@ function AdminJob() {
                     display: "grid",
                     width: "90%",
                     marginLeft: "1%",
-                    gridTemplateColumns: "repeat(6,auto)",
+                    gridTemplateColumns: "repeat(5,auto)",
                     listStyle: "none",
                     gridGap: "1vw",
                     marginTop: "2vh",

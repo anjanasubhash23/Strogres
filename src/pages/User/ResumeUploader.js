@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Input, Spin, Switch } from "antd";
 import TopNavBar from "./TopNavBar";
 import { InboxOutlined } from "@ant-design/icons";
@@ -6,11 +6,12 @@ import app from '../../firebase'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, deleteObject } from 'firebase/storage'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
-import { applyData } from '../../store/action/applicant';
+import { applyData, FetchAppliedJob } from '../../store/action/applicant';
 
 
 export default function ResumeUploader() {
   const userdata = useSelector(x => x.auth.userData)
+  const applieddata = useSelector(x => x.app.count)
   const [files, setFiles] = useState()
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState()
@@ -20,12 +21,26 @@ export default function ResumeUploader() {
   const d = data.state
   const dispatch = useDispatch()
   const uploadFile = async () => {
-    const ref1 = ref(storageRef, `/Resume/${userdata.name}`);
-    deleteObject(ref1)
-    const reff = ref(storageRef, `/Resume/${userdata.name}`);
-    await uploadBytesResumable(reff, files[0])
-    const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}`))
-    setUrl(url)
+    console.log(applieddata.some(x => x.url === userdata.url), userdata.url)
+    if (applieddata.some(x => x.url === userdata.url)) {
+      const date = Math.random() * 100
+      // const ref1 = ref(storageRef, `/Resume/${userdata.name}-Editted-${date}`);
+      // deleteObject(ref1)
+      const reff = ref(storageRef, `/Resume/${userdata.name}_Editted_${date}`);
+      await uploadBytesResumable(reff, files[0])
+      const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}_Editted_${date}`))
+      setUrl(url)
+    }
+    else {
+      const ref1 = ref(storageRef, `/Resume/${userdata.name}`);
+      deleteObject(ref1)
+      const reff = ref(storageRef, `/Resume/${userdata.name}`);
+      await uploadBytesResumable(reff, files[0])
+      const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${userdata.name}`))
+      setUrl(url)
+
+    }
+
 
   }
   const apply = async () => {
@@ -34,6 +49,12 @@ export default function ResumeUploader() {
     setLoading(false)
     navigate("/user/dashboard")
   }
+  useEffect(() => {
+    const fetchdata = async () => {
+      await dispatch(FetchAppliedJob())
+    }
+    fetchdata()
+  }, [])
   return (
     <TopNavBar>
       <div style={{ height: '90vh', width: '100%', backgroundColor: '#FFF', display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }} >

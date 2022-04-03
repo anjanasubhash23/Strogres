@@ -195,6 +195,7 @@ def get_total_experience(experience_list):
         )
         if experience:
             exp_.append(experience.groups())
+        print(exp_)
     total_exp = sum(
         [get_number_of_months_from_dates(i[0], i[2]) for i in exp_]
     )

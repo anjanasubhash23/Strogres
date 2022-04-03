@@ -34,6 +34,8 @@ export default function JobApplicants(props) {
   const [change, setChange] = useState(false)
   const [datas, setData] = useState()
   const [load, setLoad] = useState()
+  const [appid, setAppid] = useState()
+  const [appliedid, setAppliedid] = useState()
   const [lod, setLod] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
   const data = useLocation()
@@ -108,6 +110,7 @@ export default function JobApplicants(props) {
   }
   const update = async (id, mode, appuid, appliedid) => {
     setLoad(true)
+    console.log(appuid, appliedid)
     await dispatch(updateStatus(id, false, mode, appuid, appliedid))
     setLoad(false)
   }
@@ -147,12 +150,17 @@ export default function JobApplicants(props) {
             <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
           </div>
           <PopupBox visible={edit} editable={true} data={data.state.info} handleok={handleok} handlecancel={handlecancel} />
-          <div style={{ display: 'flex' }} >
-            <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
-            {change ? <div style={{ display: 'flex', padding: 8 }}>
-              <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
-              {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
-            </div> : null}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+            <div style={{ display: 'flex' }} >
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
+              {change ? <div style={{ display: 'flex', padding: 8 }}>
+                <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
+                {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
+              </div> : null}
+            </div>
+            <div>
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Rank Resume</Button>
+            </div>
           </div>
           <div className="job-tableContainer">
             {appdata ? <table className='job-table'>
@@ -160,25 +168,22 @@ export default function JobApplicants(props) {
                 return (
                   <tr>
                     <td>{x.parsedata.NAME}</td>
-                    <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
-                    <div className={lod ? "blureffect" : ""} style={{ padding: 20, border: "1px solid #ddd" }}>{!x.estatus ? "Mail Not Sent" : x.status === "" ? <div style={{ display: 'flex', padding: 0, margin: 0, justifyContent: 'center' }} >
+                    <div style={{ padding: 10, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
+                    <div className={lod ? "blureffect" : ""} style={{ padding: 10, border: "1px solid #ddd" }}>{!x.estatus ? "Mail Not Sent" : x.status === "" ? <div style={{ display: 'flex', padding: 0, margin: 0, justifyContent: 'center' }} >
                       <td>
-                        <p>Status: </p>
-                        <Button onClick={() => update(x.id, "Selected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
-                        <Button onClick={() => update(x.id, "Hold", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'yellow' }} ><MinusCircleOutlined /></Button>
-                        <Button onClick={() => update(x.id, "Rejected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
+                        <p>Status: Mail Sent </p>
+                        <Button onClick={(e) => { e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid) }} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
+                        <Button onClick={(e) => { e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid) }} style={{ color: 'white', backgroundColor: 'yellow' }} ><MinusCircleOutlined /></Button>
+                        <Button onClick={(e) => { e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid) }} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
                       </td>
                     </div> : x.status === "Hold" ? <div style={{ justifyContent: 'center' }} >
-                      <p>Status:Hold</p>
-                      <div style={{ display: 'flex', justifyContent: 'center' }} >
-                        <td>
-                          <p>Update Status:   </p>
-                          <Button onClick={() => update(x.id, "Selected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
-                          <Button onClick={() => update(x.id, "Rejected", x.appuid, x.appliedid)} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
-                        </td>
-                      </div>
+                      <td>
+                        <p>Status:Hold</p>
+                        <Button onClick={(e) => { e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid) }} style={{ color: 'white', backgroundColor: 'green' }} ><CheckOutlined /></Button>
+                        <Button onClick={(e) => { e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid) }} style={{ color: 'white', backgroundColor: 'red' }} ><CloseOutlined /></Button>
+                      </td>
                     </div> : x.status}</div>
-                    <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}  ><td  >Send Mail</td></a></div>
+                    <div style={{ padding: 10, border: "1px solid #ddd" }} ><a onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}  ><td  >Send Mail</td></a></div>
                   </tr>
                 )
               })}
@@ -204,7 +209,7 @@ export default function JobApplicants(props) {
                 <div style={{ padding: 10 }} >
                   <h2>Education</h2>
                   <ul>
-                    {datas.parsedata.EDUCATION.map(x => {
+                    {datas.parsedata.EDUCATION === "" ? null : datas.parsedata.EDUCATION.map(x => {
                       return (
                         <li>{x}</li>
                       )
@@ -214,7 +219,7 @@ export default function JobApplicants(props) {
                 <div style={{ padding: 10 }} >
                   <h2>Experience</h2>
                   <ul>
-                    {datas.parsedata.EXPERIENCE.map(x => {
+                    {datas.parsedata.EXPERIENCE === "" ? null : datas.parsedata.EXPERIENCE.map(x => {
                       return (
                         <li>{x}</li>
                       )
