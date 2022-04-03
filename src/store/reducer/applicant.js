@@ -57,7 +57,7 @@ const ApplicantHandler = (state = initialState, action) => {
         case "APPLY_DATA": {
             return {
                 ...state,
-                applied: action.data
+                applied: state.count.concat(action.data)
             }
         }
         case "FETCH_INFO": {

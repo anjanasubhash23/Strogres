@@ -115,7 +115,7 @@ function ParseDetails(props) {
                         <div style={{ padding: 10 }} >
                             <h2>Education</h2>
                             <ul>
-                                {data.parsedata.EDUCATION.map(x => {
+                                {data.parsedata.EDUCATION === "" ? null : data.parsedata.EDUCATION.map(x => {
                                     return (
                                         <li>{x}</li>
                                     )
@@ -125,7 +125,7 @@ function ParseDetails(props) {
                         <div style={{ padding: 10 }} >
                             <h2>Experience</h2>
                             <ul>
-                                {data.parsedata.EXPERIENCE.map(x => {
+                                {data.parsedata.EXPERIENCE === "" ? null : data.parsedata.EXPERIENCE.map(x => {
                                     return (
                                         <li>{x}</li>
                                     )

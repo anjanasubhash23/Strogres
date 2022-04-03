@@ -111,7 +111,7 @@ export default function JobApplicants(props) {
   const update = async (id, mode, appuid, appliedid) => {
     setLoad(true)
     console.log("Updating..")
-     await dispatch(updateStatus(id, false, mode, appuid, appliedid))
+    await dispatch(updateStatus(id, false, mode, appuid, appliedid))
     setLoad(false)
   }
   const appdata = applicant.filter(x => x.jobid === data.state.info.id)
@@ -150,12 +150,17 @@ export default function JobApplicants(props) {
             <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
           </div>
           <PopupBox visible={edit} editable={true} data={data.state.info} handleok={handleok} handlecancel={handlecancel} />
-          <div style={{ display: 'flex' }} >
-            <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
-            {change ? <div style={{ display: 'flex', padding: 8 }}>
-              <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
-              {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
-            </div> : null}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+            <div style={{ display: 'flex' }} >
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
+              {change ? <div style={{ display: 'flex', padding: 8 }}>
+                <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
+                {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
+              </div> : null}
+            </div>
+            <div>
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Rank Resume</Button>
+            </div>
           </div>
 
           <div className='app-tableContainer'>
@@ -169,6 +174,7 @@ export default function JobApplicants(props) {
               {appdata.map(x => {
                 return (
                   <tr>
+
                     <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.parsedata.NAME}</td>
                     <td>{!x.estatus? <Button disabled={load} className='app-button-email' onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}>Send Email</Button>
                     :
@@ -215,7 +221,7 @@ export default function JobApplicants(props) {
                 <div style={{ padding: 10 }} >
                   <h2>Education</h2>
                   <ul>
-                    {datas.parsedata.EDUCATION.map(x => {
+                    {datas.parsedata.EDUCATION === "" ? null : datas.parsedata.EDUCATION.map(x => {
                       return (
                         <li>{x}</li>
                       )
@@ -225,7 +231,7 @@ export default function JobApplicants(props) {
                 <div style={{ padding: 10 }} >
                   <h2>Experience</h2>
                   <ul>
-                    {datas.parsedata.EXPERIENCE.map(x => {
+                    {datas.parsedata.EXPERIENCE === "" ? null : datas.parsedata.EXPERIENCE.map(x => {
                       return (
                         <li>{x}</li>
                       )
