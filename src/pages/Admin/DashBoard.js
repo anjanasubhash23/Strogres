@@ -13,6 +13,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchJob } from "../../store/action/job";
 import { fetchcount } from "../../store/action/applicant";
+import { Helmet } from "react-helmet";
 
 function DashBoard() {
     const job = useSelector(x => x.job.job)
@@ -29,7 +30,11 @@ function DashBoard() {
     const hired = count.filter(x => x.status === "Selected")
     return (
         <SideDrawer>
-            <div className="DashBoard">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>DashBoard</title>
+            </Helmet>
+            <div className="DashBoard" style={{ fontFamily: 'Montserrat' }} >
                 <h1 style={{ padding: 20 }} >DashBoard</h1>
                 <section>
                     <div className="container">
