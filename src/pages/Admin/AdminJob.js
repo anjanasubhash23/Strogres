@@ -5,6 +5,7 @@ import SideDrawer from '../../components/SideDrawer'
 import { fetchJob } from '../../store/action/job'
 import { useSelector } from 'react-redux'
 import { Spin } from 'antd'
+import { Helmet } from 'react-helmet'
 
 function AdminJob() {
     const job = useSelector(x => x.job.job)
@@ -30,7 +31,11 @@ function AdminJob() {
     }
     return (
         <SideDrawer>
-            <div style={{ height: '90vh', backgroundColor: 'white' }} >
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Job List</title>
+            </Helmet>
+            <div style={{ height: '90vh', backgroundColor: 'white', fontFamily: 'Montserrat' }} >
                 <h2 style={{ padding: 20 }} >Job Posted</h2>
 
                 {job.length === 0 ? <div style={{ position: 'absolute', top: '50%', left: '50%' }} >

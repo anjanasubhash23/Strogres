@@ -1,4 +1,3 @@
-import { async } from "@firebase/util"
 
 export const parseResume = (url) => {
     return async (dispatch, getState) => {

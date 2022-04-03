@@ -75,7 +75,7 @@ function Editprofile() {
     return (
         <TopNavBar>
             <ToastContainer />
-            <div className='Explore' style={{ fontFamily: 'Montserrat' }} >
+            <div style={{ fontFamily: 'Montserrat', position: 'absolute', left: "25%", right: "25%" }} >
                 <h3 style={{ marginTop: 30 }} >Edit Profile Info</h3>
                 <div style={{ margin: 10 }} >
                     <label>Name</label>
@@ -108,9 +108,9 @@ function Editprofile() {
                         <Input value={city2} onChange={x => setcity2(x.target.value)} style={{ marginLeft: 10 }} />
                     </div>
                 </div>
-                <div style={{ margin: 10 }} >
+                <div style={{ margin: 15 }} >
                     <label>Resume</label>
-                    <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => { window.open(userdata.url, '_blank') }} >Click here to view current Resume</Button>
+                    <Button style={{ borderRadius: 10, margin: 10, marginBottom: 25, backgroundColor: '#FF6A3D', color: 'white' }} onClick={() => { window.open(userdata.url, '_blank') }} >Click here to view current Resume</Button>
                     <input type={'file'} onChange={x => setFile(x.target.files)} multiple={false} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }} >

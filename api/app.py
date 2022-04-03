@@ -38,7 +38,7 @@ def rankData():
     answer = pd.DataFrame(answer)
     answer = answer.iloc[[1], [0]].values[0]
     answer = round(float(answer), 4)*10
-    return answer
+    return {"answer": answer}
 
 
 @app.route("/extractExp", methods=["POST", "GET"])
