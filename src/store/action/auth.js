@@ -114,14 +114,25 @@ export const LoginHandler = (email, password, option) => {
                 returnSecureToken: true
             })
         })
-        const resData = await response.json()
-        const data = {
-            token: resData.idToken
+        if (!response.ok) {
+            const errordata = await response.json();
+            const errorid = errordata.error.message;
+            let message = 'Something Went Wrong'
+            if (errorid === 'email-already-exists') {
+                message = "Enter Email-Id Already Exists Please Enter Different Email-ID"
+            }
+            throw new Error(errorid);
         }
-        console.log(data)
-        localStorage.setItem('data', JSON.stringify(data))
-        console.log(resData.localId)
-        dispatch({ type: 'LOGIN_USER', token: resData.idToken, uid: resData.localId, admin: option })
+        else {
+            const resData = await response.json()
+            const data = {
+                token: resData.idToken
+            }
+            console.log(data)
+            localStorage.setItem('data', JSON.stringify(data))
+            console.log(resData.localId)
+            dispatch({ type: 'LOGIN_USER', token: resData.idToken, uid: resData.localId, admin: option })
+        }
     }
 }
 export const AdminData = () => {
