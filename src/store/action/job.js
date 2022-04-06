@@ -84,11 +84,19 @@ export const fetchJob = () => {
         console.log(uid)
         const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/jobs.json`)
         const resData = await response.json()
-        console.log(resData)
+        const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/Applicants.json`)
+        const resData2 = await response2.json()
+        console.log(resData2)
         const job = []
+        const applied = []
+        for (const key in resData2) {
+            const data = { jobid: resData2[key].jobId }
+            applied.push(data)
+        }
         for (const key in resData) {
+            const count = applied.filter(x => x.jobid === key)
             const data = new Job(key, resData[key].jobPost, resData[key].noOpening,
-                resData[key].jobDescription, resData[key].skills, resData[key].mode, resData[key].type, resData[key].lastdate, resData[key].city)
+                resData[key].jobDescription, resData[key].skills, resData[key].mode, resData[key].type, resData[key].lastdate, resData[key].city, count.length)
             job.push(data)
         }
         dispatch({

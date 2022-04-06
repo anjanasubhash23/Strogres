@@ -6,8 +6,8 @@ import './JobApplicant.css'
 import FileViewer from 'react-file-viewer';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchcount, parseSpecific, updateStatus } from "../../store/action/applicant"
-import { toast } from 'react-toastify';
-import { Button, Input, Modal, Popover } from 'antd';
+import { toast, ToastContainer } from 'react-toastify';
+import { Button, Checkbox, Input, Modal, Popover, Spin } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import PopupBox from '../../components/PopupBox';
 import app from '../../firebase'
@@ -17,6 +17,7 @@ import {
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import TextArea from 'antd/lib/input/TextArea';
 import { Helmet } from 'react-helmet';
+import { listClasses } from '@mui/material';
 
 export default function JobApplicants(props) {
   const newData = []
@@ -35,8 +36,12 @@ export default function JobApplicants(props) {
   const [change, setChange] = useState(false)
   const [datas, setData] = useState()
   const [load, setLoad] = useState()
+  const [item, setItem] = useState()
   const [lod, setLod] = useState(false)
+  const [appdatas, setAppdata] = useState()
+  const [open, setOpen] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
+  const [list, setList] = useState([])
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
     data.state.info.skills.map(x => { newData.push(x.text); return 0; })
@@ -61,8 +66,6 @@ export default function JobApplicants(props) {
 
   }
 
-
-  console.log(openPanel)
   const sendMail = async () => {
     console.log('sending mail')
     try {
@@ -102,24 +105,20 @@ export default function JobApplicants(props) {
       })
     }
   }
-  useEffect(() => {
-    console.log("hello")
-    fetchdata()
-  }, [])
   const handleok = value => {
     setEdit(value)
   }
   const handlecancel = value => {
     setEdit(value)
   }
-  const update = async (id, mode, appuid, appliedid) => {
+  const update = async (id, mode, appuid, appliedid, i) => {
     setLoad(true)
-    console.log("Updating..", appuid, appliedid)
-    await dispatch(updateStatus(id, false, mode, appuid, appliedid))
+    console.log("Updating..", appdatas, appdatas[i], appdatas[i].appliedid, i)
+    await dispatch(updateStatus(id, false, mode, appdatas[i].appuid, appdatas[i].appliedid))
     setLoad(false)
   }
   const appdata = applicant.filter(x => x.jobid === data.state.info.id)
-  console.log(appdata, data.state.info)
+
   const content = (
     <div style={{ fontFamily: "Montserrat" }} >
       <div style={{ display: 'flex' }} >
@@ -134,14 +133,47 @@ export default function JobApplicants(props) {
         <p>Rejected: </p>
         <span className="dot" style={{ backgroundColor: '#ff4f4f', marginLeft: 5, marginTop: 3 }}></span>
       </div>
+      <div style={{ display: 'flex' }} >
+        <p>Interview: </p>
+        <span className="dot" style={{ backgroundColor: '#bbb', marginLeft: 5, marginTop: 3 }}></span>
+      </div>
     </div>
   )
+  const options = [
+    { label: 'Selected', value: "Selected" },
+    { label: 'Hold', value: "Hold" },
+    { label: 'Rejected', value: "Rejected" },
+    { label: 'Email not Sent', value: "Email not Sent" },
+  ];
+  const onFilter = () => {
+    setOpen(false)
+    console.log(item)
+    let lists = []
+    for (const data in item) {
+      console.log(item[data], applicant.filter(x => x.status === item[data]))
+      const d = applicant.filter(x => x.status === item[data])
+      const c = lists.concat(d)
+      lists = c
+      console.log(c)
+      setList(c)
+    }
+
+  }
+  useEffect(() => {
+    console.log("hello")
+    fetchdata()
+    setAppdata(applicant.filter(x => x.jobid === data.state.info.id))
+  }, [])
   return (
     <SideDrawer>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Job-{data.state.info.jobPost}</title>
       </Helmet>
+      <ToastContainer />
+      <Modal style={{ fontFamily: "Montserrat" }} title="Filter By" visible={open} onCancel={() => setOpen(false)} footer={[<Button onClick={onFilter} style={{ borderRadius: 10, fontFamily: "Montserrat", backgroundColor: '#FF6A3D', margin: 5, color: 'white' }}  >Apply</Button>]} >
+        <Checkbox.Group options={options} defaultValue={['Selected']} onChange={x => setItem(x)} />
+      </Modal>
       <Modal footer={[
         <Button onClick={sendMail} loading={lod} style={{ borderRadius: 10, fontFamily: "Montserrat", backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
       ]} visible={visible} title={<h3 style={{ fontSize: 15, fontFamily: 'Montserrat' }} >Mail Body</h3>} onCancel={() => setVisible(false)} >
@@ -184,20 +216,21 @@ export default function JobApplicants(props) {
                 {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
               </div> : null}
             </div>
-            <div>
+            <div style={{ display: 'flex' }} >
               <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Rank Resume</Button>
+              <Button onClick={() => setOpen(true)} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Filter Resume</Button>
             </div>
-          </div>
 
+          </div>
           <div className='app-tableContainer'>
             <h1>Applicants</h1>
-            {appdata.length !== 0 ? <table className='app-table'>
+            {list.length != 0 ? <table className='app-table'>
               <tr>
                 <th>Name</th>
                 <th>Decision</th>
                 <th>Status <Popover content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
               </tr>
-              {appdata.map(x => {
+              {list.filter(x => x.jobid === data.state.info.id).map((x, index) => {
                 return (
                   <tr>
 
@@ -205,9 +238,40 @@ export default function JobApplicants(props) {
                     <td>{!x.estatus ? <Button disabled={load} className='app-button-email' onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}>Send Email</Button>
                       :
                       <div className='app-button-container'>
-                        <Button disabled={load} className='app-button-accept' onClick={(e) => { console.log(x, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid) }}  >Accept</Button>
-                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid) }}>Interview</Button>
-                        <Button disabled={load} className='app-button-reject' onClick={(e) => { console.log(x, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid) }} >Reject</Button>
+                        <Button disabled={load} className='app-button-accept' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid, index) }}  >Accept</Button>
+                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid, index) }}>Hold</Button>
+                        <Button disabled={load} className='app-button-reject' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid, index) }} >Reject</Button>
+                      </div>}
+                    </td>
+                    <td>
+                      {x.status === "Hold" ? <span className="dot" style={{ backgroundColor: '#0677d4' }}></span>
+                        :
+                        x.status === "Selected" ? <span className="dot" style={{ backgroundColor: '#00cc30' }}></span>
+                          :
+                          x.status === "Rejected" ? <span className="dot" style={{ backgroundColor: '#ff4f4f' }}></span>
+                            :
+                            <span className="dot" style={{ backgroundColor: '#bbb' }}></span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </table> : appdata.length !== 0 ? <table className='app-table'>
+              <tr>
+                <th>Name</th>
+                <th>Decision</th>
+                <th>Status <Popover content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
+              </tr>
+              {appdata.map((x, index) => {
+                return (
+                  <tr>
+
+                    <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.parsedata.NAME}</td>
+                    <td>{!x.estatus ? <Button disabled={load} className='app-button-email' onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}>Send Email</Button>
+                      :
+                      <div className='app-button-container'>
+                        <Button disabled={load} className='app-button-accept' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid, index) }}  >Accept</Button>
+                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid, index) }}>Interview</Button>
+                        <Button disabled={load} className='app-button-reject' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid, index) }} >Reject</Button>
                       </div>}
                     </td>
                     <td>

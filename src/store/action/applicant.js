@@ -292,3 +292,16 @@ export const updateInfo = (id, firstname, lastname, url, email, city, job) => {
 
     }
 }
+
+export const updateResume = (id, url) => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.userid
+        const response = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicants/${uid}/info/${id}.json`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: url
+            })
+        })
+    }
+}

@@ -1,10 +1,15 @@
 import React from 'react'
 import { Layout } from 'antd';
 import LoginCard from '../components/LoginCard';
+import { Helmet } from 'react-helmet';
 
 function AuthPage() {
     return (
         <Layout>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Welcome to Strogres</title>
+            </Helmet>
             <Layout.Header style={{ backgroundColor: '#1A2238' }} >
                 <div className='logo' >
                     <span style={{ display: 'flex' }} ><h2 style={{ color: 'white', fontFamily: 'Montserrat' }} >Stro</h2><h2 style={{ color: '#FF6A3D', fontFamily: 'Montserrat' }} >gres</h2></span>

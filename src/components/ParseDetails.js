@@ -7,6 +7,7 @@ import { useLocation } from "react-router";
 import "./ParseDetails.css"
 import { toast, ToastContainer } from 'react-toastify';
 import TextArea from 'antd/lib/input/TextArea';
+const { Search } = Input;
 
 function ParseDetails(props) {
 
@@ -17,6 +18,8 @@ function ParseDetails(props) {
     const [data, setData] = useState()
     const [subject, setSubject] = useState("Interview Call")
     const [email, setEmail] = useState()
+    const [search, setSearch] = useState("")
+    const [list, setList] = useState()
     const [visible, setVisible] = useState(false)
     const [mail, setMail] = useState()
     const location = useLocation()
@@ -56,6 +59,16 @@ function ParseDetails(props) {
         }
     }
     console.log(props.parsedata)
+    const continousSearch = (text) => {
+
+        let list = []
+        console.log("happenning")
+        setSearch(text)
+        list = props.parsedata.filter(x => x.parsedata.SKILLS.filter(y => y.toLowerCase().includes(text.toLowerCase())))
+        setList(list)
+
+
+    }
     return (
         <div className='table-container' >
             <ToastContainer />
@@ -82,18 +95,33 @@ function ParseDetails(props) {
             <div>
                 <h2>Parsed Resume Details</h2>
             </div>
+            <div className="searchBar">
+                <Search
+                    placeholder="Search Candidate based on Skills"
+                    allowClear
+                    enterButton="Search"
+                    size="large"
+                    onChange={x => continousSearch(x.target.value)}
+                    onSearch={() => console.log("search")}
+                />
+            </div>
             <div className="job-tableContainer"  >
-                <table className='job-table'>
-                    {props.parsedata.map(x => {
+                <table className='app-table'>
+                    <tr>
+                        <th>Name</th>
+                        <th>Decision</th>
+                        <th>Status  </th>
+                    </tr>
+                    {props.parsedata.map((x, index) => {
                         return (
                             <tr>
-                                <td>{x.parsedata.NAME}</td>
-                                <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={function () { setOpenPanel(true); setData(x); }}  ><td  >View Details</td></a></div>
-                                <div style={{ padding: 20, border: "1px solid #ddd" }} ><a onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME) }}  ><td  >Send Mail</td></a></div>
-                            </tr>
-                        )
-                    })}
 
+                                <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.parsedata.NAME}</td>
+                                <td onClick={function () { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME) }} >Send Mail</td>
+                                {x.status === "Selected" ? <td style={{ color: 'green' }} >{x.status}</td> : <td style={{ color: 'red' }} >{x.status}</td>}
+                            </tr>
+                        );
+                    })}
                 </table>
             </div>
             <SidePane open={openPanel} width={50} onClose={() => setOpenPanel(false)}>
