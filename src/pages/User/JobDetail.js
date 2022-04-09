@@ -34,7 +34,7 @@ export default function JobDetail() {
       var bool1 = ndata.some(x => x.status === "Rejected")
     }
     console.log(appliedData.some(x => x.jid === data.state.info.jid))
-    if (appliedData.some(x => x.jid === data.state.info.jid) && !bool && !bool1) {
+    if (appliedData.some(x => x.jid === data.state.info.jid) || !bool || bool1) {
       setIsApplied(true)
     }
     else {
@@ -54,6 +54,8 @@ export default function JobDetail() {
       return 0;
     });
   }
+  const jd = data.state.info.description + " " + newData.join(" , ")
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -73,7 +75,8 @@ export default function JobDetail() {
           data.state.info.companyName,
           jobType,
           new Date().toLocaleDateString(),
-          false
+          false,
+          jd
         )
       );
       setLoading(false);
@@ -86,6 +89,7 @@ export default function JobDetail() {
         draggable: true,
         progress: undefined,
       });
+      navigate("/user/dashboard")
     } catch (err) {
       setLoading(false);
       toast.success(err.message, {
@@ -115,7 +119,8 @@ export default function JobDetail() {
                   jid: data.state.info.jid,
                   post: data.state.info.jobPost,
                   cname: data.state.info.companyName,
-                  type: jobType
+                  type: jobType,
+                  jd: jd
                 }
               })}
             >

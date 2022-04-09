@@ -18,7 +18,8 @@ const JobHandler = (state = initialState, action) => {
                 action.data.mode,
                 action.data.type,
                 action.data.lastdate,
-                action.data.city
+                action.data.city,
+                action.data.count
             )
             return {
                 ...state,
@@ -43,6 +44,30 @@ const JobHandler = (state = initialState, action) => {
             return {
                 ...state,
                 appJob: action.data
+            }
+        }
+        case "RANKED_DATA": {
+            const index = state.count.findIndex(x => x.id === action.data.id)
+            var newdata =
+                new Job(
+                    action.data.id,
+                    state.job[index].jobPost,
+                    state.job[index].noOpening,
+                    state.job[index].jobDescription,
+                    state.job[index].skills,
+                    state.job[index].mode,
+                    state.job[index].type,
+                    state.job[index].lastdate,
+                    state.job[index].city,
+                    action.data.count,
+                    action.data.list
+                )
+
+
+            const updated = [...state.count]
+            updated[index] = newdata
+            return {
+                job: updated
             }
         }
 

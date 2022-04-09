@@ -12,6 +12,7 @@ export const parseResume = (url) => {
         })
         const resData = await response.json()
         console.log(resData)
+
         const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/Applicants.json`, {
             method: "POST",
             headers: { "content-Type": "application.json" },
@@ -32,7 +33,7 @@ export const parseResume = (url) => {
     }
 }
 
-export const parseSpecific = (jid, url) => {
+export const parseSpecific = (jid, url, jd) => {
     return async (dispatch, getState) => {
         console.log("starting...")
         const uid = getState().auth.userid
@@ -44,8 +45,19 @@ export const parseSpecific = (jid, url) => {
             })
         })
         const resData = await response.json()
-        console.log(resData)
-        const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/Applicants.json`, {
+        const response2 = await fetch("/rankresume", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: url,
+                jd: jd
+            })
+        })
+        const resData2 = await response2.json()
+        console.log(resData2)
+        const score = resData2.score
+        console.log(resData, score)
+        const response3 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/Applicants.json`, {
             method: "POST",
             headers: { "content-Type": "application.json" },
             body: JSON.stringify({
@@ -54,15 +66,14 @@ export const parseSpecific = (jid, url) => {
                 parseData: resData,
                 estatus: false,
                 status: "",
-                appuid: null,
-                appliedId: null
+                scores: score
             })
         })
-        const resData2 = await response2.json()
-        console.log(resData2, jid)
+        const resData3 = await response3.json()
+        console.log(resData3, jid)
         dispatch({
             type: "SPECIFIC_DATA", data: {
-                id: resData2.name,
+                id: resData3.name,
                 jobid: jid,
                 parsedata: resData,
                 url: url,
@@ -75,7 +86,7 @@ export const parseSpecific = (jid, url) => {
     }
 }
 
-export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate, type, url, urlid) => {
+export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate, type, jd, url, urlid) => {
     return async (dispatch, getState) => {
         if (!type) {
             const url = getState().auth.userData.url
@@ -89,6 +100,16 @@ export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate, 
                 })
             })
             const resData = await response.json()
+            const response3 = await fetch("/rankresume", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url: url,
+                    jd: jd
+                })
+            })
+            const resData3 = await response3.json()
+            const score = resData3.score
             const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicant/${uid}/AppliedData.json`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -114,7 +135,8 @@ export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate, 
                     parseData: resData,
                     jobId: jid,
                     estatus: false,
-                    status: ''
+                    status: '',
+                    scores: score
                 })
             })
             dispatch({
@@ -140,7 +162,16 @@ export const applyData = (cid, jid, jobName, companyName, jobType, appliedDate, 
             })
 
             const resData = await response.json()
-
+            const response3 = await fetch("/rankresume", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url: url,
+                    jd: jd
+                })
+            })
+            const resData3 = await response3.json()
+            const score = resData3.score
             const response2 = await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Applicant/${uid}/AppliedData.json`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -210,7 +241,7 @@ export const fetchcount = () => {
         const resData = await response.json()
         const data = []
         for (const key in resData) {
-            data.push({ id: key, url: resData[key].resume, parsedata: resData[key].parseData, jobid: resData[key].jobId, estatus: resData[key].estatus, status: resData[key].status, appuid: resData[key].appuid, appliedid: resData[key].appliedId })
+            data.push({ id: key, url: resData[key].resume, parsedata: resData[key].parseData, jobid: resData[key].jobId, estatus: resData[key].estatus, status: resData[key].status, appuid: resData[key].appuid, appliedid: resData[key].appliedId, score: resData[key].scores })
         }
         dispatch({ type: "FETCH_DATA", data: data })
     }
@@ -303,5 +334,20 @@ export const updateResume = (id, url) => {
                 url: url
             })
         })
+    }
+}
+
+export const rankResume = (url, jd) => {
+    return async (dispatch, getState) => {
+        const response = await fetch("/rankresume", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: url,
+                jd: jd
+            })
+        })
+        const resData = response.json()
+        dispatch({ type: "RANK_RESUME", data: {} })
     }
 }

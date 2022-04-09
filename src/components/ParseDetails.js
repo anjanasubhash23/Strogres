@@ -60,15 +60,21 @@ function ParseDetails(props) {
     }
     console.log(props.parsedata)
     const continousSearch = (text) => {
-
-        let list = []
-        console.log("happenning")
+        let d = props.parsedata.filter(x => x.parsedata.SKILLS.some(y => y.toLowerCase().includes(text.toLowerCase())) ? 1 : 0)
+        console.log("happenning", d)
+        const l = []
+        for (const i in d) {
+            const a = { ...d[i].parsedata, status: d[i].status }
+            console.log(a)
+            l.push(a)
+        }
         setSearch(text)
-        list = props.parsedata.filter(x => x.parsedata.SKILLS.filter(y => y.toLowerCase().includes(text.toLowerCase())))
-        setList(list)
-
+        console.log(l)
+        setList(l)
+        console.log(list)
 
     }
+    console.log(search, list, search !== "" && list.length !== 0)
     return (
         <div className='table-container' >
             <ToastContainer />
@@ -106,7 +112,7 @@ function ParseDetails(props) {
                 />
             </div>
             <div className="job-tableContainer"  >
-                <table className='app-table'>
+                {props.parsedata.length !== 0 && search === "" ? <table className='app-table'>
                     <tr>
                         <th>Name</th>
                         <th>Decision</th>
@@ -122,7 +128,25 @@ function ParseDetails(props) {
                             </tr>
                         );
                     })}
-                </table>
+                </table> : search !== "" && list.length !== 0 ? <table className='app-table'>
+                    <tr>
+                        <th>Name</th>
+                        <th>Decision</th>
+                        <th>Status  </th>
+                    </tr>
+                    {list.map((x, index) => {
+                        return (
+                            <tr>
+
+                                <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.NAME}</td>
+                                <td onClick={function () { setVisible(true); setEmail(x.EMAIL); setName(x.parsedata.NAME) }} >Send Mail</td>
+                                {x.status === "Selected" ? <td style={{ color: 'green' }} >{x.status}</td> : <td style={{ color: 'red' }} >{x.status}</td>}
+                            </tr>
+                        );
+                    })}
+                </table> : <div style={{ display: 'flex', justifyContent: 'center' }} >
+                    <h2 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', marginTop: 30 }} >No Application Found</h2>
+                </div>}
             </div>
             <SidePane open={openPanel} width={50} onClose={() => setOpenPanel(false)}>
                 {data ? <div style={{ fontFamily: "Montserrat" }} >

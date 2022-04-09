@@ -36,7 +36,7 @@ export default function Explore() {
   useEffect(() => {
     display()
     const data = jobdata.filter(x => x.jobPost.toLowerCase() === userdata.job[0].toLowerCase())
-    console.log(jobdata.some(x => x.jobPost.toLowerCase() === userdata.job[0].toLowerCase()))
+    console.log(jobdata.some(x => x.jobPost.toLowerCase() === userdata.job[1].toLowerCase()))
     let filtered = data.concat(jobdata.filter(x => x.jobPost.toLowerCase() === userdata.job[1].toLowerCase()))
     console.log(data, filtered)
     setFdata(filtered)

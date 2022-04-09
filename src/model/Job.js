@@ -1,5 +1,5 @@
 class Job {
-    constructor(id, jobPost, noOpening, jobDescription, skills, mode, type, lastdate, city, count) {
+    constructor(id, jobPost, noOpening, jobDescription, skills, mode, type, lastdate, city, count, rank) {
         this.id = id
         this.jobPost = jobPost
         this.noOpening = noOpening
@@ -10,6 +10,7 @@ class Job {
         this.lastdate = lastdate
         this.city = city
         this.count = count
+        this.rank = rank
     }
 }
 
