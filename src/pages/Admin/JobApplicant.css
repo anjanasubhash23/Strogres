@@ -19,18 +19,19 @@
 
 }
 
-.app-table > tr>td:nth-child(1):hover{
+.app-table>tr>td:nth-child(1):hover {
     background-color: #f0f0f0;
     opacity: 0.6;
     transition: 0.3s;
 }
-.app-table > tr>td:nth-child(1){
+
+.app-table>tr>td:nth-child(1) {
     color: black;
-    cursor:pointer
+    cursor: pointer
 }
 
 
-.app-table > tr>td:nth-child(3){
+.app-table>tr>td:nth-child(3) {
     pointer-events: none;
 }
 
@@ -41,6 +42,7 @@
 .app-subContainer>p {
     font-weight: 400;
 }
+
 .app-table>tr>th {
     text-align: center;
 }
@@ -56,14 +58,14 @@
 
 .app-table>tr>td {
     padding: 8px;
-    text-align:center;
+    text-align: center;
     border: 1px solid #ddd;
     padding: 20px;
     font-size: large;
 }
 
 .app-table>tr>th {
-    text-align:center;
+    text-align: center;
     padding: 20px;
     border: 1px solid #ddd;
     background-color: var(--clr-primary-400);
@@ -75,7 +77,8 @@
 .app-table>tr>td:first-child {
     font-weight: 400;
 }
-.app-table>tr>td>:nth-child(2) > a{
+
+.app-table>tr>td>:nth-child(2)>a {
     color: #db3000;
 }
 
@@ -83,63 +86,62 @@
 
 .app-table>tr>td:nth-child(3):hover {
     background-color: red;
-    text-align:center;
+    text-align: center;
     color: white;
     opacity: 0.6;
     transition: 0.3s;
 }
 
-.app-table>tr>td:nth-child(2){
+.app-table>tr>td:nth-child(2) {
     text-align: center;
 }
 
-.app-tableContainer>h1{
+.app-tableContainer>h1 {
     text-align: center;
     font-size: 25px;
 }
 
 
 .app-table>tr>td:nth-child(4):hover {
-    background-color: blue;
     color: white;
     opacity: 0.6;
     transition: 0.3s;
 }
 
-.app-button-container{
-    text-align:center;
-  width: 300px;
-  margin: 0 auto;
+.app-button-container {
+    text-align: center;
+    width: 300px;
+    margin: 0 auto;
 }
 
-.ant-btn.ant-btn-default.app-button-accept:hover{
+.ant-btn.ant-btn-default.app-button-accept:hover {
     border-color: green;
     color: green;
     margin-right: 20px;
 }
 
-.ant-btn.ant-btn-default.app-button-hold:hover{
+.ant-btn.ant-btn-default.app-button-hold:hover {
     border-color: #0677d4;
     color: #0677d4;
     margin-right: 10px;
     margin-left: 10px;
 }
 
-.ant-btn.ant-btn-default.app-button-reject:hover{
+.ant-btn.ant-btn-default.app-button-reject:hover {
     border-color: red;
     color: red;
     margin-left: 20px;
 }
 
-.ant-btn.ant-btn-default.app-button-email:hover{
+.ant-btn.ant-btn-default.app-button-email:hover {
     border-color: #f8643c;
     color: #f8643c;
 }
 
-.dot{
-  height: 15px;
-  width: 15px;
-  background-color: #ff4d4d;
-  border-radius: 50%;
-  display: inline-block;
+.dot {
+    height: 15px;
+    width: 15px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    display: inline-block;
 }

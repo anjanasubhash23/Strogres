@@ -62,12 +62,12 @@ def extract_email(text):
 
 
 def extract_number(text):
-    mob_num_regex = r'''(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)
-                        [-\.\s]*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})'''
+    mob_num_regex = r'''((?:\+\d{2}[-\.\s]??|\d{4}[-\.\s]??)?(?:\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4}))'''
     phone = re.findall(re.compile(mob_num_regex), text)
-
+    print(phone)
     if phone:
         number = ''.join(phone[0])
+        print(number)
         return number
 
 

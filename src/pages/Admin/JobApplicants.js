@@ -177,21 +177,24 @@ export default function JobApplicants(props) {
     }
 
   }
-  // const ranked = async () => {
-  //   if (data.state.info.rank === undefined) {
-  //     setRanked(appdata.sort((a, b) => b.scores > a.scores ? 1 : -1))
-  //     if (appdata.length >= data.state.info.noOpening) {
-  //       await dispatch(addRank(data.state.info.id, data.state.info.count, [rank]))
-  //     }
-  //   }
-  // }
+  const ranked = async () => {
+    if (data.state.info.rank === undefined) {
+      setRanked(appdata.sort((a, b) => b.scores > a.scores ? 1 : -1))
+      if (appdata.length >= data.state.info.noOpening) {
+        await dispatch(addRank(data.state.info.id, data.state.info.count, [rank]))
+      }
+    }
+    else {
+      setRanked(data.state.info.rank)
+    }
+  }
   useEffect(() => {
     setLoading(true)
     console.log("hello")
     fetchdata()
     setAppdata(applicant.filter(x => x.jobid === data.state.info.id))
     setList([])
-    // ranked()
+    ranked()
     setLoading(false)
   }, [])
   console.log(appdata, list, list.length)

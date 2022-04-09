@@ -34,7 +34,7 @@ export default function JobDetail() {
       var bool1 = ndata.some(x => x.status === "Rejected")
     }
     console.log(appliedData.some(x => x.jid === data.state.info.jid))
-    if (appliedData.some(x => x.jid === data.state.info.jid) && !bool && bool1) {
+    if (appliedData.some(x => x.jid === data.state.info.jid) || !bool || bool1) {
       setIsApplied(true)
     }
     else {
@@ -54,7 +54,7 @@ export default function JobDetail() {
       return 0;
     });
   }
-  const jd = data.state.info.description + " " + data.state.info.skills.length !== 0 ? newData.join(" , ") : ""
+  const jd = data.state.info.description + " " + newData.join(" , ")
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -89,6 +89,7 @@ export default function JobDetail() {
         draggable: true,
         progress: undefined,
       });
+      navigate("/user/dashboard")
     } catch (err) {
       setLoading(false);
       toast.success(err.message, {
