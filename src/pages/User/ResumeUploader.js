@@ -13,6 +13,7 @@ export default function ResumeUploader() {
   const userdata = useSelector(x => x.auth.userData)
   const applieddata = useSelector(x => x.app.count)
   const [files, setFiles] = useState()
+  const [load, setLoad] = useState(false)
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState()
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export default function ResumeUploader() {
   const d = data.state
   const dispatch = useDispatch()
   const uploadFile = async () => {
+    setLoad(true)
     console.log(applieddata.some(x => x.url === userdata.url), userdata.url)
     if (applieddata.some(x => x.url === userdata.url)) {
       const date = Math.random() * 100
@@ -40,12 +42,12 @@ export default function ResumeUploader() {
       setUrl(url)
 
     }
-
+    setLoad(false)
 
   }
   const apply = async () => {
     setLoading(true)
-    await dispatch(applyData(d.cid, d.jid, d.post, d.cname, d.type, new Date().toLocaleDateString(), true, url, userdata.id))
+    await dispatch(applyData(d.cid, d.jid, d.post, d.cname, d.type, new Date().toLocaleDateString(), true, d.jd, url, userdata.id))
     setLoading(false)
     navigate("/user/dashboard")
   }

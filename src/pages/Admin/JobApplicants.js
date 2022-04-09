@@ -18,6 +18,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import TextArea from 'antd/lib/input/TextArea';
 import { Helmet } from 'react-helmet';
 import { listClasses } from '@mui/material';
+import { addRank } from '../../store/action/job';
 
 export default function JobApplicants(props) {
   const newData = []
@@ -42,6 +43,8 @@ export default function JobApplicants(props) {
   const [open, setOpen] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
   const [list, setList] = useState([])
+  const [rtype, setRtype] = useState(true)
+  const [rank, setRanked] = useState()
   const data = useLocation()
   if (data.state.info.skills.length !== 0) {
     data.state.info.skills.map(x => { newData.push(x.text); return 0; })
@@ -52,14 +55,18 @@ export default function JobApplicants(props) {
     await dispatch(fetchcount())
   }
   const storageRef = getStorage(app)
+  const jd = data.state.info.jobDescription + " " + newData.join(",")
+  console.log(jd)
   const parse = async () => {
     setLoad(true)
+    console.log(data.state.info.jobDescription)
+
     for (let i = 0; i < files.length; i++) {
       const reff = ref(storageRef, `/Resume/${files[i].name}`);
       await uploadBytesResumable(reff, files[i])
       const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${files[i].name}`))
       console.log(url)
-      await dispatch(parseSpecific(data.state.info.id, url))
+      await dispatch(parseSpecific(data.state.info.id, url, jd))
     }
     setLoad(false)
     setChange(false)
@@ -117,7 +124,7 @@ export default function JobApplicants(props) {
     await dispatch(updateStatus(id, false, mode, appdatas[i].appuid, appdatas[i].appliedid))
     setLoad(false)
   }
-  const appdata = applicant.filter(x => x.jobid === data.state.info.id)
+  let appdata = applicant.filter(x => x.jobid === data.state.info.id)
 
   const content = (
     <div style={{ fontFamily: "Montserrat" }} >
@@ -139,6 +146,11 @@ export default function JobApplicants(props) {
       </div>
     </div>
   )
+  const content1 = (
+    <div>
+      <p>Upload resume in bulk</p>
+    </div>
+  )
   const options = [
     { label: 'Selected', value: "Selected" },
     { label: 'Hold', value: "Hold" },
@@ -151,7 +163,13 @@ export default function JobApplicants(props) {
     let lists = []
     for (const data in item) {
       console.log(item[data], applicant.filter(x => x.status === item[data]))
-      const d = applicant.filter(x => x.status === item[data])
+      let d;
+      if (item[data] === "Email not Sent") {
+        d = applicant.filter(x => x.estatus === false)
+      }
+      else {
+        d = applicant.filter(x => x.status === item[data])
+      }
       const c = lists.concat(d)
       lists = c
       console.log(c)
@@ -159,11 +177,33 @@ export default function JobApplicants(props) {
     }
 
   }
+  // const ranked = async () => {
+  //   if (data.state.info.rank === undefined) {
+  //     setRanked(appdata.sort((a, b) => b.scores > a.scores ? 1 : -1))
+  //     if (appdata.length >= data.state.info.noOpening) {
+  //       await dispatch(addRank(data.state.info.id, data.state.info.count, [rank]))
+  //     }
+  //   }
+  // }
   useEffect(() => {
+    setLoading(true)
     console.log("hello")
     fetchdata()
     setAppdata(applicant.filter(x => x.jobid === data.state.info.id))
+    setList([])
+    // ranked()
+    setLoading(false)
   }, [])
+  console.log(appdata, list, list.length)
+  if (loading) {
+    return (
+      <SideDrawer>
+        <div style={{ position: 'absolute', top: '50%', left: '55%', textAlign: 'center' }} >
+          <Spin size='large' style={{ color: '#FF6A3D' }} />
+        </div>
+      </SideDrawer>
+    )
+  }
   return (
     <SideDrawer>
       <Helmet>
@@ -206,31 +246,34 @@ export default function JobApplicants(props) {
             </div>
             <p>Job Description: {data.state.info.jobDescription}</p>
             <p>Skills Required: {data.state.info.skills.length !== 0 ? newData.join(" , ") : ""} </p>
+            <p>No of Opening: {data.state.info.noOpening}</p>
           </div>
           <PopupBox visible={edit} editable={true} data={data.state.info} handleok={handleok} handlecancel={handlecancel} />
           <div style={{ display: 'flex', justifyContent: 'space-between' }} >
             <div style={{ display: 'flex' }} >
-              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button>
+              <Popover content={content1} ><Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setChange(true)} >Add Resume</Button></Popover>
               {change ? <div style={{ display: 'flex', padding: 8 }}>
                 <input type={'file'} onChange={x => setFiles(x.target.files)} multiple={true} />
                 {files ? <Button loading={load} onClick={parse} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Parse</Button> : null}
               </div> : null}
             </div>
-            <div style={{ display: 'flex' }} >
-              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Rank Resume</Button>
+            {appdata.length !== 0 ? <div style={{ display: 'flex' }} >
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setRtype(true)}   >Rank Resumes</Button>
+              <Button style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} onClick={() => setRtype(false)}>All Resumes</Button>
               <Button onClick={() => setOpen(true)} style={{ borderRadius: 10, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Filter Resume</Button>
-            </div>
+            </div> : null}
 
           </div>
           <div className='app-tableContainer'>
             <h1>Applicants</h1>
-            {list.length != 0 ? <table className='app-table'>
+            {list.length !== 0 ? <table className='app-table'>
               <tr>
                 <th>Name</th>
                 <th>Decision</th>
-                <th>Status <Popover content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
+                <th>Status <Popover style={{ fontFamily: 'Montserrat' }} content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
               </tr>
               {list.filter(x => x.jobid === data.state.info.id).map((x, index) => {
+                console.log(list)
                 return (
                   <tr>
 
@@ -255,13 +298,14 @@ export default function JobApplicants(props) {
                   </tr>
                 );
               })}
-            </table> : appdata.length !== 0 ? <table className='app-table'>
+            </table> : rtype ? appdata.length !== 0 ? <table className='app-table'>
               <tr>
                 <th>Name</th>
                 <th>Decision</th>
                 <th>Status <Popover content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
               </tr>
-              {appdata.map((x, index) => {
+              {appdata.sort((a, b) => b.scores > a.scores ? 1 : -1).slice(0, data.state.info.noOpening).map((x, index) => {
+                console.log(appdata)
                 return (
                   <tr>
 
@@ -270,7 +314,7 @@ export default function JobApplicants(props) {
                       :
                       <div className='app-button-container'>
                         <Button disabled={load} className='app-button-accept' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid, index) }}  >Accept</Button>
-                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid, index) }}>Interview</Button>
+                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid, index) }}>Hold</Button>
                         <Button disabled={load} className='app-button-reject' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid, index) }} >Reject</Button>
                       </div>}
                     </td>
@@ -288,6 +332,42 @@ export default function JobApplicants(props) {
               })}
             </table> : <div style={{ display: 'flex', justifyContent: 'center' }} >
               <h2 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', marginTop: 30 }} >No Application Received Yet</h2>
+            </div> : !rtype ? appdata.length !== 0 ? <table className='app-table'>
+              <tr>
+                <th>Name</th>
+                <th>Decision</th>
+                <th>Status <Popover content={content} trigger="hover" title="Status Color Info" ><InfoCircleOutlined /></Popover> </th>
+              </tr>
+              {appdata.map((x, index) => {
+                console.log(appdata)
+                return (
+                  <tr>
+
+                    <td onClick={function () { setOpenPanel(true); setData(x); }}>{x.parsedata.NAME}</td>
+                    <td>{!x.estatus ? <Button disabled={load} className='app-button-email' onClick={() => { setVisible(true); setEmail(x.parsedata.EMAIL); setName(x.parsedata.NAME); setId(x.id) }}>Send Email</Button>
+                      :
+                      <div className='app-button-container'>
+                        <Button disabled={load} className='app-button-accept' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Selected", x.appuid, x.appliedid, index) }}  >Accept</Button>
+                        <Button disabled={load} className='app-button-hold' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Hold", x.appuid, x.appliedid, index) }}>Hold</Button>
+                        <Button disabled={load} className='app-button-reject' onClick={(e) => { console.log(x, index, x.appuid, x.appliedid); e.preventDefault(); update(x.id, "Rejected", x.appuid, x.appliedid, index) }} >Reject</Button>
+                      </div>}
+                    </td>
+                    <td>
+                      {x.status === "Hold" ? <span className="dot" style={{ backgroundColor: '#0677d4' }}></span>
+                        :
+                        x.status === "Selected" ? <span className="dot" style={{ backgroundColor: '#00cc30' }}></span>
+                          :
+                          x.status === "Rejected" ? <span className="dot" style={{ backgroundColor: '#ff4f4f' }}></span>
+                            :
+                            <span className="dot" style={{ backgroundColor: '#bbb' }}></span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </table> : <div style={{ display: 'flex', justifyContent: 'center' }} >
+              <h2 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', marginTop: 30 }} >No Application Received Yet</h2>
+            </div> : <div style={{ display: 'flex', justifyContent: 'center' }} >
+              <h2 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', marginTop: 30 }} >No Application Received Yet</h2>
             </div>}
           </div>
 
@@ -301,7 +381,7 @@ export default function JobApplicants(props) {
                   <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.EMAIL}</p>
                   <p style={{ padding: 0, margin: 0 }} >{datas.parsedata.MOBILE_NUMBER}</p>
                 </div>
-                <Button loading={loading} onClick={() => setVisible(true)} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
+                <Button onClick={() => setVisible(true)} style={{ borderRadius: 10, marginTop: 20, backgroundColor: '#FF6A3D', margin: 5, color: 'white' }} >Send Mail</Button>
               </div>
               <div style={{ display: 'flex' }} >
                 <div onClick={() => { setOption(!option) }} style={{ fontFamily: 'Montserrat', textAlign: 'center', width: '50%', color: !option ? '#FFFFFF' : 'black', backgroundColor: !option ? '#FF6A3D' : 'grey', padding: 8 }} >Details</div>

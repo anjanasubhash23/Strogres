@@ -15,7 +15,8 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode, 
                 mode,
                 type,
                 lastdate,
-                city
+                city,
+                count: 0
             })
         })
         const resData = await response.json()
@@ -33,7 +34,8 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode, 
                 mode,
                 type,
                 lastdate,
-                city
+                city,
+                count: 0
             })
         })
         dispatch({
@@ -46,7 +48,8 @@ export const addJobOpening = (jobPost, noOpening, jobDescription, skills, mode, 
                 mode,
                 type,
                 lastdate,
-                city
+                city,
+                count: 0
             }
         })
     }
@@ -96,7 +99,7 @@ export const fetchJob = () => {
         for (const key in resData) {
             const count = applied.filter(x => x.jobid === key)
             const data = new Job(key, resData[key].jobPost, resData[key].noOpening,
-                resData[key].jobDescription, resData[key].skills, resData[key].mode, resData[key].type, resData[key].lastdate, resData[key].city, count.length)
+                resData[key].jobDescription, resData[key].skills, resData[key].mode, resData[key].type, resData[key].lastdate, resData[key].city, count.length, resData[key].rank)
             job.push(data)
         }
         dispatch({
@@ -165,3 +168,18 @@ export const editJob = (id, jobPost, noOpening, jobDescription, skills, mode, ty
     }
 }
 
+export const addRank = (id, count, list) => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.userid
+        const data = getState().auth.userData
+        await fetch(`https://resume-parser-bf8d9-default-rtdb.firebaseio.com/Company/${uid}/jobs/${id}.json`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                rank: list
+            })
+        })
+        dispatch({ type: "RANKED_DATA", data: { id: id, list: list, count } })
+    }
+
+}
