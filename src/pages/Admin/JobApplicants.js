@@ -60,8 +60,13 @@ export default function JobApplicants(props) {
   const parse = async () => {
     setLoad(true)
     console.log(data.state.info.jobDescription)
+    // if (files[0].type == "application/zip") {
+    //   // const zip = new JSZip();
+    //   zip.loadAsync(files[0]).then(data => console.log(data))
 
+    // }
     for (let i = 0; i < files.length; i++) {
+
       const reff = ref(storageRef, `/Resume/${files[i].name}`);
       await uploadBytesResumable(reff, files[i])
       const url = await getDownloadURL(ref(storageRef, `${'Resume/'}${files[i].name}`))
