@@ -16,12 +16,14 @@ import Explore from './pages/User/Explore';
 import JobDetail from './pages/User/JobDetail';
 import ResumeUploader from './pages/User/ResumeUploader';
 import Editprofile from './pages/User/Editprofile';
+import OnboardingScreen from './pages/OnboardingScreen';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<AuthPage />} />
+        <Route path='/' element={<OnboardingScreen />} />
+        <Route path='/auth' element={<AuthPage />} />
         <Route path='/register/:type' element={<RegisterPage />} />
         <Route path='/check' element={<CheckUser />} />
         <Route path='/admin/job' element={<ProtectedRoutes><AdminJob /></ProtectedRoutes>} />

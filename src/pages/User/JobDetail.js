@@ -34,7 +34,7 @@ export default function JobDetail() {
       var bool1 = ndata.some(x => x.status === "Rejected")
     }
     console.log(appliedData.some(x => x.jid === data.state.info.jid))
-    if (appliedData.some(x => x.jid === data.state.info.jid) || !bool || bool1) {
+    if (appliedData.some(x => x.jid === data.state.info.jid) && !bool && !bool1) {
       setIsApplied(true)
     }
     else {
