@@ -5,10 +5,10 @@ import { Helmet } from 'react-helmet';
 
 function AuthPage() {
     return (
-        <Layout>
+        <Layout style={{ backgroundColor: '#1A2238', width: "100vw", height: '100vh' }} >
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Welcome to Strogres</title>
+                <title>Strogres-Login</title>
             </Helmet>
             <Layout.Header style={{ backgroundColor: '#1A2238' }} >
                 <div className='logo' >
